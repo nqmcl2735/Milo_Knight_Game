@@ -69,10 +69,6 @@ void MainObject::HandleInputAction(SDL_Event events)
 	else if (events.type == SDL_MOUSEBUTTONDOWN)
 	{
 		
-		if(events.button.button == SDL_BUTTON_LEFT)
-		{
-			
-		}
 		
 	}
 	else if (events.type == SDL_MOUSEBUTTONUP)
@@ -81,6 +77,7 @@ void MainObject::HandleInputAction(SDL_Event events)
 	}
 	else 
 	{
+
 	}
 }
 

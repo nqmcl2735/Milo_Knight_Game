@@ -1,8 +1,10 @@
-﻿Build started 2/22/2024 3:55:40 PM.
+﻿Build started 2/22/2024 11:05:13 PM.
      1>Project "C:\Users\ADMIN\Documents\Visual Studio 2012\Projects\SDL1_2Game\SDL1_2Game\SDL1_2Game.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
-         main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ThreatObject.cpp
+         ThreatObject.cpp
+     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.cpp(17): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.cpp(31): warning C4018: '<' : signed/unsigned mismatch
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ADMIN\Documents\Visual Studio 2012\Projects\SDL1_2Game\Debug\SDL1_2Game.exe" /INCREMENTAL /NOLOGO SDL.lib SDLmain.lib SDL_image.lib SDL_mixer.lib SDL_ttf.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ADMIN\Documents\Visual Studio 2012\Projects\SDL1_2Game\Debug\SDL1_2Game.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ADMIN\Documents\Visual Studio 2012\Projects\SDL1_2Game\Debug\SDL1_2Game.lib" /MACHINE:X86 Debug\AmoObject.obj
          Debug\BaseObject.obj
@@ -15,4 +17,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.28
+Time Elapsed 00:00:01.30

@@ -4,11 +4,11 @@
 #include "Common_Function.h"
 #include "BaseObject.h"
 
-#define WIDTH_LASER 33
-#define HEIGHT_LASER 11
+#define WIDTH_VLASER 33
+#define HEIGHT_VLASER 11
 
-#define WIDTH_SPHERE 11
-#define HEIGHT_SPHERE 33
+#define WIDTH_PLASER 11
+#define HEIGHT_PLASER 33
 
 #define UNIT_AMO_STEP 20
 
@@ -18,8 +18,8 @@ public:
 	enum AmoType
 	{
 		NONE,
-		LASER,
-		SPHERE
+		VLASER,
+		PLASER
 	};
 
 	AmoObject();

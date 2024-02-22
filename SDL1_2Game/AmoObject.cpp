@@ -22,7 +22,7 @@ AmoObject::~AmoObject()
 void AmoObject::HandleMoveVertical(const int & border_left, const int & border_right)
 {
 	rect_.x += x_val_;
-	if(rect_.x < border_left || rect_.x + WIDTH_LASER > border_right){ 
+	if(rect_.x < border_left || rect_.x + WIDTH_VLASER > border_right){ 
 		is_move_ = false;
 	}
 }
@@ -30,7 +30,7 @@ void AmoObject::HandleMoveVertical(const int & border_left, const int & border_r
 void AmoObject::HandleMovePortrait(const int & border_top, const int & border_bot)
 {
 	rect_.y += y_val_;
-	if(rect_.y < border_top || rect_.y + HEIGHT_SPHERE > border_bot)
+	if(rect_.y < border_top || rect_.y + HEIGHT_PLASER > border_bot)
 	{
 		is_move_ = false;
 	}

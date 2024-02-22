@@ -31,17 +31,17 @@ public:
 	{
 		AmoObject* p_amo = new AmoObject();
 		if(x_drc_){
-			p_amo -> SetWidthHeight(WIDTH_LASER, HEIGHT_LASER);
+			p_amo -> SetWidthHeight(WIDTH_VLASER, HEIGHT_VLASER);
 			p_amo -> LoadImg("amourGunVertical.png");
-			p_amo -> set_type(AmoObject::LASER);
+			p_amo -> set_type(AmoObject::VLASER);
 			p_amo -> set_x_drc(this->x_drc_);
 			p_amo -> set_y_drc(0);
 		}	
 		else 
 		{
-			p_amo -> SetWidthHeight(WIDTH_SPHERE, HEIGHT_SPHERE);
+			p_amo -> SetWidthHeight(WIDTH_PLASER, HEIGHT_PLASER);
 			p_amo -> LoadImg("amourGunPortrait.png");
-			p_amo -> set_type(AmoObject::SPHERE);
+			p_amo -> set_type(AmoObject::PLASER);
 			p_amo -> set_x_drc(0);
 			p_amo -> set_y_drc(this->y_drc_);
 		}

@@ -60,9 +60,8 @@ int main(int arc, char* argv[])
 		if(p_threat){
 			p_threat->LoadImg("newDemonL.png");
 
-			int rand_y = Random(0, SCREEN_HEIGHT - THREAT_HEIGHT);
-
-			p_threat->SetRect(SCREEN_WIDTH + t * 200, rand_y);
+			int rand_y = Random(ROOM_Y, ROOM_Y + ROOM_HEIGHT - THREAT_HEIGHT);
+			p_threat->SetRect(ROOM_X + ROOM_WIDTH - THREAT_WIDTH - 10, rand_y);
 			p_threat->set_x_val(-5);
 			AmoObject* p_amo = new AmoObject;
 			p_threat->InitAmo(p_amo);
@@ -100,7 +99,7 @@ int main(int arc, char* argv[])
 			ThreatObject* p_threat = (p_threats + tt);
 			if(p_threat){
 				p_threat->Show(g_screen);
-				p_threat->HandleMove(SCREEN_WIDTH - THREAT_WIDTH, SCREEN_HEIGHT);
+				p_threat->HandleMove(ROOM_X + ROOM_WIDTH - THREAT_WIDTH, SCREEN_HEIGHT);
 				p_threat->MakeAmo(g_screen, SCREEN_WIDTH, SCREEN_HEIGHT);
 			}
 		}
