@@ -14,7 +14,7 @@
    + AP power : A static that can increase by buying new items.
 - Your player has 3 abilities:
   + Using `Q` to fire a damaging bolt of energy scale by your AD power
-  + Using `E` to fire an orb that sign the enemy hit in 3 seconds . If player hits an signed enemy with by another abilities, unsign and deals damage scale by your AP power.
+  + Using `E` to fire an orb that sign the enemy hit in 3 seconds . If player hits an signed enemy by another abilities, unsign and deals damage scale by your AP power.
   + Using `SPACE` to fire a powerful barrage of energy that deals damage to each unit it passes through scale by your AP power.
 ## About Game
 - This Game is built with OOP system which I learned from [`here`](https://www.youtube.com/@PhatTrienPhanMem123AZ).
