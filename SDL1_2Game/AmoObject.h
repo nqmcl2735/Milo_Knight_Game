@@ -10,6 +10,9 @@
 #define WIDTH_PLASER 11
 #define HEIGHT_PLASER 33
 
+#define WIDTH_ORB 56
+#define HEIGHT_ORB 42
+
 #define UNIT_AMO_STEP 20
 
 class AmoObject : public BaseObject 
@@ -19,7 +22,8 @@ public:
 	{
 		NONE,
 		VLASER,
-		PLASER
+		PLASER,
+		ORB
 	};
 
 	AmoObject();

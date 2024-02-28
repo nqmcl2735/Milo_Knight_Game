@@ -17,9 +17,6 @@ SDL_Surface* SDLCommonFunc::LoadImage(std::string file_path)
 			SDL_SetColorKey(optimize_image, SDL_SRCCOLORKEY, color_key);
 		}
 	}
-
-
-
 	return optimize_image;
 }
 

@@ -15,7 +15,8 @@ const int ROOM_WIDTH = 861;
 const int ROOM_HEIGHT = 707;
 const int ROOM_X = 170;
 const int ROOM_Y = 45;
-
+const int GATE_TOP = 330;
+const int GATE_BOT = 405;
 
 static SDL_Surface *g_screen = NULL;
 static SDL_Surface *g_bkground = NULL;

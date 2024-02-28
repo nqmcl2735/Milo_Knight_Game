@@ -8,6 +8,10 @@ MainObject::MainObject()
 	rect_.h = HEIGHT_MAIN_OBJECT;
 	x_val_ = 0;
 	y_val_ = 0;
+	health_ = 700;
+	shield_ = 100;
+	AD_pow_ = 60;
+	AP_pow_ = 30;
 }
 
 MainObject::~MainObject()
@@ -46,6 +50,14 @@ void MainObject::HandleInputAction(SDL_Event events)
 			break;
 		case SDLK_q:
 			ShootAmo();
+			break;
+		case SDLK_e:
+			ShootOrb();
+			break;
+
+		/*case SDLK_SPACE
+			ShootUlti();
+			break;*/
 		default:
 			break;
 		}
@@ -81,45 +93,52 @@ void MainObject::HandleInputAction(SDL_Event events)
 	}
 }
 
-void MainObject::HandleMove()
+void MainObject::HandleMove(const BaseObject & Lgate_object,const BaseObject & Rgate_object)
 {
 	rect_.x += x_val_;
 	rect_.y += y_val_;
-	if(rect_.x < ROOM_X || rect_.x + WIDTH_MAIN_OBJECT > ROOM_X + ROOM_WIDTH){ 
-		rect_.x -= x_val_;
+	SDL_Rect g_Lrect = Lgate_object.GetRect();
+	SDL_Rect g_Rrect = Rgate_object.GetRect();
+	if(rect_.y >= GATE_TOP && rect_.y <= GATE_BOT) 
+	{
+		if(SDLCommonFunc::CheckCollision(rect_, g_Lrect) || SDLCommonFunc::CheckCollision(rect_, g_Rrect))
+			rect_.x -= x_val_;
 	}
-	if(rect_.y < ROOM_Y || rect_.y + HEIGHT_MAIN_OBJECT > ROOM_Y + ROOM_HEIGHT){
-		rect_.y -= y_val_;
+	else if(rect_.y < ROOM_Y || rect_.y + HEIGHT_MAIN_OBJECT > ROOM_Y + ROOM_HEIGHT || rect_.x < ROOM_X || rect_.x + WIDTH_MAIN_OBJECT > ROOM_X + ROOM_WIDTH){
+			rect_.y -= y_val_;
+			rect_.x -= x_val_;
 	}
-	
-	
 	//
 }
 void MainObject::MakeAmo(SDL_Surface* des)
 {
 	for (int i = 0; i < p_amo_list_.size(); i ++)
+	{
+		std::vector<AmoObject*> amo_list = p_amo_list_;
+		AmoObject * p_amo = amo_list.at(i);
+		if(p_amo != NULL)
 		{
-			std::vector<AmoObject*> amo_list = p_amo_list_;
-			AmoObject * p_amo = amo_list.at(i);
-			if(p_amo != NULL)
+			if(p_amo-> get_is_move())
 			{
-				if(p_amo-> get_is_move())
-				{
-					if(p_amo -> get_x_drc())
-						p_amo -> HandleMoveVertical(ROOM_X, ROOM_X + ROOM_WIDTH);
-					else p_amo -> HandleMovePortrait(ROOM_Y, ROOM_Y + ROOM_HEIGHT);
-					p_amo -> Show(des);
-				}
+				if(p_amo -> get_x_drc())
+					p_amo -> HandleMoveVertical(ROOM_X, ROOM_X + ROOM_WIDTH);
+				else p_amo -> HandleMovePortrait(ROOM_Y, ROOM_Y + ROOM_HEIGHT);
+				p_amo -> Show(des);
 			}
 			else 
 			{
-				if(p_amo != NULL)
-				{
-					amo_list.erase(amo_list.begin() + i);
-					SetAmoList(amo_list);
-					delete p_amo;
-					p_amo = NULL;
-				} 
+				if(i < amo_list.size()) amo_list.erase(amo_list.begin() + i);
+				SetAmoList(amo_list);
+				delete p_amo;
+				p_amo = NULL;	
 			}
 		}
+		else if(i < amo_list.size())
+		{
+			amo_list.erase(amo_list.begin() + i);
+			SetAmoList(amo_list);
+			delete p_amo;
+			p_amo = NULL;
+		}
+	}
 }
