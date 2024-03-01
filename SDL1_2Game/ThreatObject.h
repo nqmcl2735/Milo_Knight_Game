@@ -49,6 +49,7 @@ private:
 	bool is_alive_;
 	int pow_;
 	int LR_;
+	bool is_shoted_;
 };
 
 #endif

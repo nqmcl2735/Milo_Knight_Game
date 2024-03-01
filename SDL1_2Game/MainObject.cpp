@@ -12,6 +12,9 @@ MainObject::MainObject()
 	shield_ = 100;
 	AD_pow_ = 60;
 	AP_pow_ = 30;
+	coolDownQ_ = 0;
+	coolDownE_ = 0;
+	coolDownU_ = 0;
 }
 
 MainObject::~MainObject()
@@ -49,15 +52,23 @@ void MainObject::HandleInputAction(SDL_Event events)
 			x_val_ -= UNIT_STEP;
 			break;
 		case SDLK_q:
-			ShootAmo();
+			if(coolDownQ_ == 0){ 
+				ShootAmo();
+				coolDownQ_ = COOLQ;
+			}
 			break;
 		case SDLK_e:
-			ShootOrb();
+			if(coolDownE_ == 0){
+				ShootOrb();
+				coolDownE_ = COOLE;
+			}
 			break;
-
-		/*case SDLK_SPACE
-			ShootUlti();
-			break;*/
+		case SDLK_SPACE:
+			if(coolDownU_ == 0){
+				ShootUlti();
+				coolDownU_ = COOLU;
+			}
+			break;
 		default:
 			break;
 		}

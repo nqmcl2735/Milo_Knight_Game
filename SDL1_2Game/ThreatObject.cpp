@@ -7,11 +7,12 @@ ThreatObject::ThreatObject()
 	rect_.h = THREAT_HEIGHT;
 	x_val_ = 0;
 	y_val_ = 0;
-	health_ = 300;
+	health_ = 200;
 	is_signed_ = 0;
 	is_alive_ = 1;
 	pow_ = 60;
 	LR_ = -1;
+	is_shoted_ = 0;
 }
 
 ThreatObject::~ThreatObject()
@@ -118,6 +119,15 @@ bool ThreatObject::checkAmour(MainObject & human_object)
 						set_is_signed(0);
 					}
 					human_object.Remove_Amo(am);
+				}
+				else if(tp == AmoObject::ULTI && is_shoted_ == 0)
+				{
+					change_health((-1) * (400.0/100.0 * human_object.get_AP_pow()));
+					if(get_is_signed()){ 
+						change_health((-1) * (50.0/100.0 * human_object.get_AP_pow()));
+						set_is_signed(0);
+					}
+					is_shoted_ = 1;
 				}
 				else if(tp == AmoObject::ORB)
 				{

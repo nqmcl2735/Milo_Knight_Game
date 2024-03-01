@@ -4,6 +4,7 @@
 #include "AmoObject.h"
 #include <time.h>
 #include <vector>
+#include "ImpTimer.h" 
 bool Init()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
@@ -41,13 +42,15 @@ struct round
 		Rgate_object.SetRect(1025, 335);
 		Rgate_object.SetWidthHeight(25, 145);
 		Rgate_object.LoadImg("Gate.png");
+
 		static_object.SetRect(100, 20);
 		static_object.LoadImg("static.png");
+		
 		human_object.SetRect(180, 330);
-		//330-405
 		human_object.LoadImg("knight_animsR.png");
 		human_object.set_x_drc(1);
 		human_object.set_y_drc(0);
+
 		for (int t = 0; t < NUM_THREAT; t ++)
 		{
 			ThreatObject *p_threat = new ThreatObject;
@@ -80,83 +83,86 @@ struct round
 		human_object.Show(g_screen);
 		human_object.HandleMove(Lgate_object, Rgate_object);
 		human_object.MakeAmo(g_screen);
+		human_object.coolProcess();
 		
 
-		////xu li va cham dan vs main
+		//xu li va cham dan vs main
+		
+		for (int i = 0; i < p_threats.size(); i ++)
+		{
+			ThreatObject *p_threat = p_threats.at(i);
+			if(p_threat->get_is_alive()){
+				std::vector<AmoObject*> amo_list = p_threat->GetAmoList();
+				for (int am = 0; am < amo_list.size(); am ++)
+				{
+					AmoObject* p_amo = amo_list.at(am);
+					if(p_amo && p_amo -> get_is_move())
+					{
+						bool is_col = SDLCommonFunc::CheckCollision(p_amo->GetRect(), human_object.GetRect());
+						if(is_col)
+						{
+							if(human_object.get_shield() > 0)
+							{
+								int p_shield = human_object.get_shield();
+								human_object.set_shield(max(p_shield - p_threat->get_pow(), 0));
+							}
+							else 
+							{
+								human_object.change_health((-1) * (100.0/100.0 * p_threat->get_pow()));
+							}
+							if(human_object.get_health() <= 0){
+								p_still_live = 0;
+								is_quit = 1;
+								break;
+							}
+							if(am < amo_list.size()) amo_list.erase(amo_list.begin() + am);
+							p_threat->SetAmoList(amo_list);
+						}
+					}
+				}
+				if(p_still_live == 0) return;
+			}
+		}
+		if(p_still_live == 0) return;
 		//
-		//for (int i = 0; i < p_threats.size(); i ++)
-		//{
-		//	ThreatObject *p_threat = p_threats.at(i);
-		//	if(p_threat->get_is_alive()){
-		//		std::vector<AmoObject*> amo_list = p_threat->GetAmoList();
-		//		for (int am = 0; am < amo_list.size(); am ++)
-		//		{
-		//			AmoObject* p_amo = amo_list.at(am);
-		//			if(p_amo && p_amo -> get_is_move())
-		//			{
-		//				bool is_col = SDLCommonFunc::CheckCollision(p_amo->GetRect(), human_object.GetRect());
-		//				if(is_col)
-		//				{
-		//					if(human_object.get_shield() > 0)
-		//					{
-		//						int p_shield = human_object.get_shield();
-		//						human_object.set_shield(max(p_shield - p_threat->get_pow(), 0));
-		//					}
-		//					else 
-		//					{
-		//						human_object.change_health((-1) * (100.0/100.0 * p_threat->get_pow()));
-		//					}
-		//					if(human_object.get_health() <= 0){
-		//						p_still_live = 0;
-		//						is_quit = 1;
-		//						break;
-		//					}
-		//					if(am < amo_list.size()) amo_list.erase(amo_list.begin() + am);
-		//					p_threat->SetAmoList(amo_list);
-		//				}
-		//			}
-		//		}
-		//		if(p_still_live = 0) break;
-		//	}
-		//}
-		//if(p_still_live = 0) break;
-		////
 
-		//// Implement threat object
-		//for (int i = 0; i < p_threats.size(); i ++)
-		//{
-		//	std::vector<ThreatObject*> threat_list = p_threats;
-		//	ThreatObject *p_threat = threat_list.at(i);
-		//	if(p_threat->get_is_alive()){
-		//		p_threat->Show(g_screen);
-		//		if(numLoop % 24 == 0) {
-		//			p_threat-> set_x_val(Random(-1, 1) * (5));
-		//			p_threat-> set_y_val(Random(-1, 1) * (5));
-		//			
-		//			if(p_threat->get_x_val() == 5){ 
-		//				p_threat->LoadImg("NewDemonR.png");
-		//				p_threat->set_LR(1);
-		//			}
-		//			else if (p_threat->get_x_val() == -5){ 
-		//				p_threat->LoadImg("NewDemonL.png");
-		//				p_threat->set_LR(-1);
-		//			}
-		//		}
-		//		if(numLoop % 20 == 0){ 
-		//			AmoObject* p_amo = new AmoObject;
-		//			p_threat->InitAmo(p_amo);
-		//		}
-		//		p_threat->HandleMove(ROOM_X + ROOM_WIDTH - THREAT_WIDTH, SCREEN_HEIGHT);
-		//		p_threat->MakeAmo(g_screen, SCREEN_WIDTH, SCREEN_HEIGHT);
-		//		// xu li va cham dan vs threat
-		//		if(!p_threat->checkAmour(human_object))
-		//		{
-		//			p_threat->set_is_alive(0);
-		//			p_threat->SetRect(SCREEN_WIDTH, SCREEN_HEIGHT);
-		//		}
-		//	}
-		//}
-		//
+		// Implement threat object
+		for (int i = 0; i < p_threats.size(); i ++)
+		{
+			std::vector<ThreatObject*> threat_list = p_threats;
+			ThreatObject *p_threat = threat_list.at(i);
+			if(p_threat->get_is_alive()){
+				p_threat->Show(g_screen);
+				
+				if(numLoop % 24 == 0) {
+					p_threat-> set_x_val(Random(-1, 1) * (5));
+					p_threat-> set_y_val(Random(-1, 1) * (5));
+					
+					if(p_threat->get_x_val() == 5){ 
+						p_threat->LoadImg("NewDemonR.png");
+						p_threat->set_LR(1);
+					}
+					else if (p_threat->get_x_val() == -5){ 
+						p_threat->LoadImg("NewDemonL.png");
+						p_threat->set_LR(-1);
+					}
+				}
+				if(numLoop % 20 == 0){ 
+					AmoObject* p_amo = new AmoObject;
+					p_threat->InitAmo(p_amo);
+				}
+
+				p_threat->HandleMove(ROOM_X + ROOM_WIDTH - THREAT_WIDTH, SCREEN_HEIGHT);
+				p_threat->MakeAmo(g_screen, SCREEN_WIDTH, SCREEN_HEIGHT);
+				// xu li va cham dan vs threat
+				if(!p_threat->checkAmour(human_object))
+				{
+					p_threat->set_is_alive(0);
+					p_threat->SetRect(SCREEN_WIDTH, SCREEN_HEIGHT);
+				}
+			}
+		}
+		
 		
 		//test in game loop
 		
@@ -167,6 +173,9 @@ struct round
 
 int main(int arc, char* argv[])
 {
+
+	ImpTimer fps_timer;
+
 	srand(time(NULL));
 	if (Init() == false)
 		return 0;
@@ -181,10 +190,19 @@ int main(int arc, char* argv[])
 	long long numLoop = 0;
 	while (!is_quit) 
 	{
+		fps_timer.start();
 		R1.gameLoop(is_quit, p_still_live, numLoop);
 		// Update screen	
 		if (SDL_Flip(g_screen) == -1)
 			return 0;
+		
+		int real_imp_time = fps_timer.get_tick();
+		int time_one_frame = 1000/FRAME_PER_SECOND;
+		if(real_imp_time < time_one_frame)
+		{
+ 			int delay_time = time_one_frame - real_imp_time;
+			SDL_Delay(delay_time);
+		}
 		numLoop ++;
 	}
 	// clean up variables in program

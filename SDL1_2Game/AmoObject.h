@@ -13,6 +13,9 @@
 #define WIDTH_ORB 56
 #define HEIGHT_ORB 42
 
+#define WIDTH_ULTI 72
+#define HEIGHT_ULTI 72
+
 #define UNIT_AMO_STEP 20
 
 class AmoObject : public BaseObject 
@@ -23,7 +26,8 @@ public:
 		NONE,
 		VLASER,
 		PLASER,
-		ORB
+		ORB, 
+		ULTI
 	};
 
 	AmoObject();
@@ -55,6 +59,8 @@ public:
 
 	int get_x_drc() const {return x_drc_;}
 	int get_y_drc() const {return y_drc_;}
+
+
 	
 
 
