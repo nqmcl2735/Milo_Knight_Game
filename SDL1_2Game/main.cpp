@@ -153,7 +153,7 @@ struct round
 			if(p_threat->get_is_alive()){
 				p_threat->Show(g_screen);
 				p_threat->CoolProcess();
-				//p_threat->ChangeDir();
+				p_threat->ChangeDir();
 				AmoObject* p_amo = new AmoObject;
 				p_threat->InitAmo(p_amo);
 				p_threat->HandleMove(ROOM_X + ROOM_WIDTH - THREAT_WIDTH, SCREEN_HEIGHT);

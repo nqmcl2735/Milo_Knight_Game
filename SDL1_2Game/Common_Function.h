@@ -12,7 +12,7 @@ const int SCREEN_WIDTH = 1200;
 const int SCREEN_HEIGHT = 800;
 const int SCREEN_BPP = 32;
 
-const int NUM_THREAT = 1;
+const int NUM_THREAT = 4;
 
 const int ROOM_WIDTH = 861;
 const int ROOM_HEIGHT = 707;

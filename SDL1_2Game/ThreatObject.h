@@ -10,7 +10,7 @@
 #define THREAT_HEIGHT 121
 #define ATTACK_SPEED 600
 #define CHANGE_DIRECT_TIME 800
-#define UNIT_STEP 0
+#define UNIT_STEP 5
 class ThreatObject : public BaseObject
 {
 public:
