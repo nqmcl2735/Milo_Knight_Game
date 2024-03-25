@@ -5,6 +5,12 @@
 #include <time.h>
 #include <vector>
 #include "ImpTimer.h" 
+#include "TextObject.h"
+#include "UserInterface.h"
+
+TTF_Font*  g_font_text = NULL;
+
+
 bool Init()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
@@ -16,22 +22,37 @@ bool Init()
 	{
 		return false;
 	}
+	if(TTF_Init() == -1)
+	{
+		return false;
+	}
+	g_font_text = TTF_OpenFont("Mojang-Bold.ttf", 11);
+	if (g_font_text == NULL) 
+	{
+		return false;
+	}
 	return true;
 }
 struct round 
 {
+
 	// room objects
 	BaseObject room_object;
 	BaseObject border_object;
 	BaseObject Lgate_object;
 	BaseObject Rgate_object;
-	// static object
-	BaseObject static_object;
 	// main object
 	MainObject human_object;
 	std::vector<ThreatObject*> p_threats;
+
+	//test outside game loop
+	
+	
+	//
 	void preapre()
 	{
+		human_object.prepare();
+
 		room_object.SetRect(150, 25);
 		room_object.LoadImg("room0.png");
 		border_object.SetRect(150, 25);
@@ -43,9 +64,6 @@ struct round
 		Rgate_object.SetWidthHeight(25, 145);
 		Rgate_object.LoadImg("Gate.png");
 
-		static_object.SetRect(100, 20);
-		static_object.LoadImg("static.png");
-		
 		human_object.SetRect(180, 330);
 		human_object.LoadImg("knight_animsR.png");
 		human_object.set_x_drc(1);
@@ -57,10 +75,10 @@ struct round
 			p_threat->LoadImg("newDemonL.png");
 			int rand_y = Random(ROOM_Y, ROOM_Y + ROOM_HEIGHT - THREAT_HEIGHT);
 			p_threat->SetRect(ROOM_X + ROOM_WIDTH - THREAT_WIDTH - 10, rand_y);
-			p_threat->set_x_val(-5); 
 			p_threats.push_back(p_threat);
 		}
 	}
+
 	void gameLoop(bool &is_quit, bool &p_still_live, long long numLoop)
 	{
 		while (SDL_PollEvent(&g_even)) 
@@ -78,7 +96,7 @@ struct round
 		border_object.Show(g_screen);
 		Lgate_object.Show(g_screen);
 		Rgate_object.Show(g_screen);
-		static_object.Show(g_screen);
+		
 		//Implement main object
 		human_object.Show(g_screen);
 		human_object.HandleMove(Lgate_object, Rgate_object);
@@ -95,7 +113,7 @@ struct round
 				std::vector<AmoObject*> amo_list = p_threat->GetAmoList();
 				for (int am = 0; am < amo_list.size(); am ++)
 				{
-					AmoObject* p_amo = amo_list.at(am);
+						AmoObject* p_amo = amo_list.at(am);
 					if(p_amo && p_amo -> get_is_move())
 					{
 						bool is_col = SDLCommonFunc::CheckCollision(p_amo->GetRect(), human_object.GetRect());
@@ -119,6 +137,7 @@ struct round
 							p_threat->SetAmoList(amo_list);
 						}
 					}
+					if(p_still_live == 0) return;
 				}
 				if(p_still_live == 0) return;
 			}
@@ -133,25 +152,10 @@ struct round
 			ThreatObject *p_threat = threat_list.at(i);
 			if(p_threat->get_is_alive()){
 				p_threat->Show(g_screen);
-				
-				if(numLoop % 24 == 0) {
-					p_threat-> set_x_val(Random(-1, 1) * (5));
-					p_threat-> set_y_val(Random(-1, 1) * (5));
-					
-					if(p_threat->get_x_val() == 5){ 
-						p_threat->LoadImg("NewDemonR.png");
-						p_threat->set_LR(1);
-					}
-					else if (p_threat->get_x_val() == -5){ 
-						p_threat->LoadImg("NewDemonL.png");
-						p_threat->set_LR(-1);
-					}
-				}
-				if(numLoop % 20 == 0){ 
-					AmoObject* p_amo = new AmoObject;
-					p_threat->InitAmo(p_amo);
-				}
-
+				p_threat->CoolProcess();
+				//p_threat->ChangeDir();
+				AmoObject* p_amo = new AmoObject;
+				p_threat->InitAmo(p_amo);
 				p_threat->HandleMove(ROOM_X + ROOM_WIDTH - THREAT_WIDTH, SCREEN_HEIGHT);
 				p_threat->MakeAmo(g_screen, SCREEN_WIDTH, SCREEN_HEIGHT);
 				// xu li va cham dan vs threat
@@ -163,9 +167,8 @@ struct round
 			}
 		}
 		
-		
 		//test in game loop
-		
+		 human_object.ShowStatic(g_screen);
 		//
 	}
 }R1;
@@ -173,13 +176,16 @@ struct round
 
 int main(int arc, char* argv[])
 {
+	
+
 
 	ImpTimer fps_timer;
 
 	srand(time(NULL));
 	if (Init() == false)
 		return 0;
-
+	TextObject mark_game;
+	unsigned int mark_value = 0;
 	g_bkground = SDLCommonFunc::LoadImage("bkground.png");
 	if (g_bkground == NULL)
 		return 0;
@@ -192,7 +198,8 @@ int main(int arc, char* argv[])
 	{
 		fps_timer.start();
 		R1.gameLoop(is_quit, p_still_live, numLoop);
-		// Update screen	
+		
+		// Update screen
 		if (SDL_Flip(g_screen) == -1)
 			return 0;
 		

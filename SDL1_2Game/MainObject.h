@@ -4,14 +4,16 @@
 #include "Common_Function.h"
 #include "BaseObject.h"
 #include "AmoObject.h"
+#include "TextObject.h"
+#include "UserInterface.h"
 #include <vector>
 
 #define WIDTH_MAIN_OBJECT 60
 
 #define HEIGHT_MAIN_OBJECT 80
 
-#define COOLQ 2000
-#define COOLE 3000
+#define COOLQ 1500
+#define COOLE 2000
 #define COOLU 20000
 
 #define UNIT_STEP 10
@@ -133,6 +135,9 @@ public:
 		coolDownE_ = max(0, coolDownE_ - 1000/FRAME_PER_SECOND);
 		coolDownU_ = max(0, coolDownU_ - 1000/FRAME_PER_SECOND);
 	}
+	void prepare() {UI.prepare();}
+	void ShowStatic(SDL_Surface * des);
+	
 private:
 	int x_val_;
 	int y_val_;
@@ -142,6 +147,7 @@ private:
 
 
 	// statics in game
+
 	int health_;
 	//int money_;
 	int shield_;
@@ -151,6 +157,9 @@ private:
 	int coolDownQ_;
 	int coolDownE_;
 	int coolDownU_;
+
+	UserInterface UI;
+
 };
 
 #endif //MAIN_OBJECT_H_

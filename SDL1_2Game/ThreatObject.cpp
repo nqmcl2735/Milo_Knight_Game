@@ -5,14 +5,15 @@ ThreatObject::ThreatObject()
 	rect_.y = SCREEN_HEIGHT/2;
 	rect_.w = THREAT_WIDTH;
 	rect_.h = THREAT_HEIGHT;
-	x_val_ = 0;
+	x_val_ = - UNIT_STEP;
 	y_val_ = 0;
-	health_ = 200;
+	health_ = 210;
 	is_signed_ = 0;
 	is_alive_ = 1;
 	pow_ = 60;
 	LR_ = -1;
-	is_shoted_ = 0;
+	ACool_ = 0;
+	DCool_ = 0;
 }
 
 ThreatObject::~ThreatObject()
@@ -63,9 +64,26 @@ void ThreatObject::MakeAmo(SDL_Surface *des, const int& x_limit, const int& y_li
 		}
 	}
 }
+void ThreatObject::ChangeDir()
+{
+	if(DCool_ == 0){
+		set_x_val(Random(-1, 1) * (UNIT_STEP));
+		set_y_val(Random(-1, 1) * (UNIT_STEP));
+					
+		if(get_x_val() == UNIT_STEP){ 
+			LoadImg("NewDemonR.png");
+			set_LR(1);
+		}
+		else if (get_x_val() == - UNIT_STEP){ 
+			LoadImg("NewDemonL.png");
+			set_LR(-1);
+		}
+		DCool_ = CHANGE_DIRECT_TIME;
+	}
+}
 void ThreatObject::InitAmo(AmoObject * p_amo)
 {
-	if(p_amo)
+	if(p_amo && ACool_ == 0)
 	{
 		bool ret = p_amo->LoadImg("amourGunVertical.png");
 		if(ret)
@@ -79,9 +97,15 @@ void ThreatObject::InitAmo(AmoObject * p_amo)
 			p_amo -> set_x_val(UNIT_AMO_STEP * (p_amo->get_x_drc()));
 			p_amo -> set_y_val(UNIT_AMO_STEP * (p_amo->get_y_drc()));
 			p_amo_list_.push_back(p_amo);
+			ACool_ = ATTACK_SPEED;
 		}
 
 	}
+}
+void ThreatObject :: CoolProcess()
+{
+	ACool_ = max(0, ACool_ - 1000/FRAME_PER_SECOND);
+	DCool_ = max(0, DCool_ - 1000/FRAME_PER_SECOND);
 }
 void ThreatObject:: HandleMove(const int& x_border, const int & y_border)
 {
@@ -120,14 +144,14 @@ bool ThreatObject::checkAmour(MainObject & human_object)
 					}
 					human_object.Remove_Amo(am);
 				}
-				else if(tp == AmoObject::ULTI && is_shoted_ == 0)
+				else if(tp == AmoObject::ULTI && notTouched(p_amo))
 				{
 					change_health((-1) * (400.0/100.0 * human_object.get_AP_pow()));
 					if(get_is_signed()){ 
 						change_health((-1) * (50.0/100.0 * human_object.get_AP_pow()));
 						set_is_signed(0);
 					}
-					is_shoted_ = 1;
+					TouchedUlt_.push_back(p_amo);
 				}
 				else if(tp == AmoObject::ORB)
 				{

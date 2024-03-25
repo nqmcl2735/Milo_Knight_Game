@@ -8,8 +8,8 @@ MainObject::MainObject()
 	rect_.h = HEIGHT_MAIN_OBJECT;
 	x_val_ = 0;
 	y_val_ = 0;
-	health_ = 700;
-	shield_ = 100;
+	health_ = 600;
+	shield_ = 150;
 	AD_pow_ = 60;
 	AP_pow_ = 30;
 	coolDownQ_ = 0;
@@ -19,6 +19,7 @@ MainObject::MainObject()
 
 MainObject::~MainObject()
 {
+	;
 }
 
 void MainObject::HandleInputAction(SDL_Event events)
@@ -121,6 +122,7 @@ void MainObject::HandleMove(const BaseObject & Lgate_object,const BaseObject & R
 	}
 	//
 }
+
 void MainObject::MakeAmo(SDL_Surface* des)
 {
 	for (int i = 0; i < p_amo_list_.size(); i ++)
@@ -152,4 +154,10 @@ void MainObject::MakeAmo(SDL_Surface* des)
 			p_amo = NULL;
 		}
 	}
+}
+void MainObject::ShowStatic(SDL_Surface * des)
+{
+	UI.process(health_, 600,
+				shield_, 150,		
+				des);
 }
