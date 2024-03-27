@@ -31,6 +31,7 @@ ThreatObject::~ThreatObject()
 		}
 		p_amo_list_.clear();
 	}
+	TouchedUlt_.clear();
 }
 void ThreatObject::MakeAmo(SDL_Surface *des, const int& x_limit, const int& y_limit)
 {

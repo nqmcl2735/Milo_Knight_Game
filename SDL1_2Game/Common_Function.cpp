@@ -28,11 +28,7 @@ void SDLCommonFunc::ApplySurface(SDL_Surface* src, SDL_Surface* des, int x, int 
 	SDL_BlitSurface(src, NULL, des, &offset);
 }
 
-void SDLCommonFunc::CleanUp()
-{
-	SDL_FreeSurface(g_screen);
-	SDL_FreeSurface(g_bkground);
-}
+
 bool SDLCommonFunc::CheckPointInRect(const int & x,const int & y, const SDL_Rect& object)
 {
 	int lf = object.x;
@@ -65,4 +61,9 @@ bool SDLCommonFunc::CheckCollision(const SDL_Rect& object1, const SDL_Rect& obje
 		if(CheckPointInRect(p.first, p.second, object1)) return 1;
 	}
 	return 0;
+}
+void SDLCommonFunc::CleanUp()
+{
+	SDL_FreeSurface(g_screen);
+	SDL_FreeSurface(g_bkground);
 }

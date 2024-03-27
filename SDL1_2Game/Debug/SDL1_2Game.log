@@ -1,46 +1,17 @@
-﻿Build started 3/25/2024 8:47:57 AM.
+﻿Build started 3/28/2024 1:56:23 AM.
      1>Project "C:\Users\ADMIN\Documents\Visual Studio 2012\Projects\SDL1_2Game\SDL1_2Game\SDL1_2Game.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt AmoObject.cpp BaseObject.cpp Common_Function.cpp ImpTimer.cpp MainObject.cpp TextObject.cpp ThreatObject.cpp UserInterface.cpp main.cpp
-         AmoObject.cpp
-         Generating Code...
-         Compiling...
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
          main.cpp
      1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\mainobject.h(121): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.h(13): warning C4005: 'UNIT_STEP' : macro redefinition
                  c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\mainobject.h(19) : see previous definition of 'UNIT_STEP'
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\main.cpp(109): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\main.cpp(114): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\main.cpp(129): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\main.cpp(136): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\main.cpp(149): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\main.cpp(184): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
-         UserInterface.cpp
-         ThreatObject.cpp
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\mainobject.h(121): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.h(13): warning C4005: 'UNIT_STEP' : macro redefinition
-                 c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\mainobject.h(19) : see previous definition of 'UNIT_STEP'
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.cpp(23): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.cpp(37): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.cpp(52): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.cpp(60): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.cpp(130): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.cpp(140): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.cpp(142): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.cpp(149): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\threatobject.cpp(151): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-         TextObject.cpp
-         MainObject.cpp
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\mainobject.h(121): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\mainobject.cpp(128): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\mainobject.cpp(143): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\mainobject.cpp(149): warning C4018: '<' : signed/unsigned mismatch
-         ImpTimer.cpp
-         Common_Function.cpp
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\common_function.cpp(52): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\common_function.cpp(62): warning C4018: '<' : signed/unsigned mismatch
-         BaseObject.cpp
-         Generating Code...
+     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\main.cpp(202): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\main.cpp(207): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\main.cpp(222): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\main.cpp(229): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\main.cpp(242): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\visual studio 2012\projects\sdl1_2game\sdl1_2game\main.cpp(300): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ADMIN\Documents\Visual Studio 2012\Projects\SDL1_2Game\Debug\SDL1_2Game.exe" /INCREMENTAL /NOLOGO SDL.lib SDLmain.lib SDL_image.lib SDL_mixer.lib SDL_ttf.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ADMIN\Documents\Visual Studio 2012\Projects\SDL1_2Game\Debug\SDL1_2Game.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ADMIN\Documents\Visual Studio 2012\Projects\SDL1_2Game\Debug\SDL1_2Game.lib" /MACHINE:X86 Debug\AmoObject.obj
          Debug\BaseObject.obj
@@ -56,4 +27,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:07.09
+Time Elapsed 00:00:01.44

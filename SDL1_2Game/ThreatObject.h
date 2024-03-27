@@ -79,7 +79,7 @@ private:
 	int LR_;
 
 	int ACool_;
-	int DCool_;
+	int DCool_;;
 	std::vector<AmoObject*> TouchedUlt_;
 };
 
