@@ -15,6 +15,7 @@ MainObject::MainObject()
 	coolDownQ_ = 0;
 	coolDownE_ = 0;
 	coolDownU_ = 0;
+	UNIT_STEP = 3;
 }
 
 MainObject::~MainObject()

@@ -16,11 +16,12 @@
 #define COOLE 2000
 #define COOLU 20000
 
-#define UNIT_STEP 10
+
 
 class MainObject : public BaseObject 
 {
 public:
+	int UNIT_STEP;
 	MainObject();
 	~MainObject();
 

@@ -98,7 +98,7 @@ void ThreatObject::InitAmo(AmoObject * p_amo)
 			p_amo -> set_x_val(UNIT_AMO_STEP * (p_amo->get_x_drc()));
 			p_amo -> set_y_val(UNIT_AMO_STEP * (p_amo->get_y_drc()));
 			p_amo_list_.push_back(p_amo);
-			ACool_ = ATTACK_SPEED;
+			ACool_ = GUN_ATTACK_SPEED;
 		}
 
 	}

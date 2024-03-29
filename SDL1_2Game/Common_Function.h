@@ -22,6 +22,9 @@ const int ROOM_Y = 45;
 const int GATE_TOP = 330;
 const int GATE_BOT = 405;
 
+const int STILE_X = 40;
+const int STILE_Y = 30;
+
 
 const int FRAME_PER_SECOND = 40; // fps cua game
 

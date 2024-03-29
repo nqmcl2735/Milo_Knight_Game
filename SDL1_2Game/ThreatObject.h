@@ -8,12 +8,16 @@
 #include <vector>
 #define THREAT_WIDTH 110
 #define THREAT_HEIGHT 121
-#define ATTACK_SPEED 600
+#define GUN_ATTACK_SPEED 600
+#define TANK_ATTACK_SPEED 0
 #define CHANGE_DIRECT_TIME 800
 #define UNIT_STEP 5
 class ThreatObject : public BaseObject
 {
+
 public:
+	static const int GUN_HEALTH = 210;
+	static const int TANK_HEALTH = 330;
 	enum
 	{
 		GUN_THREAT,
@@ -53,6 +57,10 @@ public:
 	int get_pow() const {return pow_;}
 	void set_pow(const int & x) {pow_ = x;}
 	
+	int get_type() const {return type_;}
+	void set_type(const int & x) {type_ = x;}
+	
+
 	void set_LR(const int & x) {LR_ = x;}
 	
 	bool checkAmour(MainObject & human_object);
@@ -78,6 +86,7 @@ private:
 	int pow_;
 	int LR_;
 
+	int type_;
 	int ACool_;
 	int DCool_;;
 	std::vector<AmoObject*> TouchedUlt_;
