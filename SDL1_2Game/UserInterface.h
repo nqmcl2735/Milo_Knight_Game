@@ -15,7 +15,7 @@ public:
 	void process(const int & val_health, const int & max_health,
 				const int & val_shield, const int & max_shield,
 				SDL_Surface * des);
-
+	int Minus_Pos ;
 private:
 	struct	game_stat
 	{
@@ -109,5 +109,6 @@ private:
 		}
 	} health_, shield_;
 	BaseObject UI_background;
+
 };
 #endif

@@ -18,6 +18,12 @@
 
 
 
+#define STAT_POS_NORMAL_W 
+#define STAT_POS_NORMAL_H 
+
+#define STAT_POS_MENU_W 
+#define STAT_POS_MENU_H
+
 class MainObject : public BaseObject 
 {
 public:
@@ -136,8 +142,13 @@ public:
 		coolDownE_ = max(0, coolDownE_ - 1000/FRAME_PER_SECOND);
 		coolDownU_ = max(0, coolDownU_ - 1000/FRAME_PER_SECOND);
 	}
-	void prepare() {UI.prepare();}
-	void ShowStatic(SDL_Surface * des);
+	void prepare(int gameStat) {
+		if (gameStat == 2 ) UI.Minus_Pos = 450 ; 
+		else UI.Minus_Pos = 0 ; 
+		UI.prepare();
+	}
+
+	void ShowStatic(SDL_Surface * des); 
 	
 private:
 	int x_val_;

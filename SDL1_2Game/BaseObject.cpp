@@ -13,6 +13,7 @@ BaseObject::~BaseObject()
 	if(p_object_ != NULL)
 	{
 		SDL_FreeSurface(p_object_);
+		p_object_ = NULL ; 
 	}
 }
 

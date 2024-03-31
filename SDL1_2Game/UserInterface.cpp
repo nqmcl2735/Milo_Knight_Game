@@ -2,10 +2,10 @@
 void UserInterface::prepare()
 {
 	health_.PicLoad("red");
-	health_.SetPos(400, 650);
+	health_.SetPos(400, 650 - Minus_Pos);
 	health_.icon.LoadImg("pngs/icons/health.png");
 	shield_.PicLoad("purple");
-	shield_.SetPos(400, 710);
+	shield_.SetPos(400, 710 - Minus_Pos);
 	shield_.icon.LoadImg("pngs/icons/shield.png");
 
 
