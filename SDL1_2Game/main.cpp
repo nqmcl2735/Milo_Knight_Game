@@ -47,9 +47,30 @@ struct menuStruct
 	BaseObject guideBk;
 	
 } menu;
+<<<<<<< Updated upstream
 
 
 
+=======
+struct PauseMenu 
+{
+	TTF_Font * pauseFont ;
+	TTF_Font * bodyFont ; 
+	static const int numItems = 3;
+	static const int num_f = 10 ; 
+	BaseObject pauseBK ; 
+	BaseObject pauseItem[numItems]; 
+	BaseObject Skill_Items [numItems] ; 
+	BaseObject avatar_of_player ; 
+	std::string pauseString[numItems];
+	std::string Display_Skill_str ;
+	TextObject User_Data [2] ; 
+	TextObject pauseText [numItems]; 
+	TextObject Display_Skill ; 
+	TextObject Menu_Title [2]; 
+	bool is_show ;  
+}pauseMenu;
+>>>>>>> Stashed changes
 
 enum gameStatus 
 {
@@ -159,7 +180,7 @@ struct round
 		human_object.LoadImg("knight_animsR.png");
 		human_object.set_x_drc(1);
 		human_object.set_y_drc(0);
-		human_object.prepare();
+		human_object.prepare(g_stat);
 		
 	}
 
@@ -312,6 +333,48 @@ void prepare()
 	
 	
 }
+void prepare_pause () 
+{
+	pauseMenu.pauseBK.SetWidthHeight(970,750) ; 
+	pauseMenu.pauseBK.SetRect(-185,-335) ; 
+	pauseMenu.is_show = false ; 
+	pauseMenu.avatar_of_player.LoadImg("Avatar.jpg") ; 
+	pauseMenu.avatar_of_player.SetRect(220,180) ; 
+	pauseMenu.bodyFont = TTF_OpenFont("Mojang-Bold.ttf",20) ; 
+	pauseMenu.pauseFont = TTF_OpenFont("Mojang-Bold.ttf", 35);
+	pauseMenu.Display_Skill.SetText("Skill :") ; 
+	pauseMenu.Display_Skill.SetColor(TextObject::BLACK_TEXT) ; 
+	pauseMenu.Display_Skill.SetRect (660,180) ;
+	pauseMenu.Menu_Title[0].SetText("________PROFILE________") ; 
+	pauseMenu.Menu_Title[1].SetText("________SETTING________") ;
+	pauseMenu.User_Data[0].SetText("Mi-Lo Knight") ; 
+	pauseMenu.User_Data[1].SetText("Cre : deptrai2k5 (long nguyen) xautrai2k5 (minhnguyen)" ) ; 
+	for (int i = 0 ;i < 2 ; i ++ ) 
+	{
+	pauseMenu.Menu_Title[i].SetRect(230,120 + 245 * i) ; 
+	pauseMenu.Menu_Title[i].SetColor(TextObject :: WHITE_TEXT) ;
+	pauseMenu.User_Data[i].SetRect(205 - 10 * i , 330 + 300 * i) ;
+	pauseMenu.User_Data[i].SetColor(TextObject :: BLACK_TEXT) ; 
+	}
+	pauseMenu.Skill_Items[0].LoadImg("skillQ.png") ; 
+	pauseMenu.Skill_Items[1].LoadImg("skillE.png") ; 
+	pauseMenu.Skill_Items[2].LoadImg("skillUlt.png") ; 
+	pauseMenu.pauseString[0] = "MENU" ; 
+	pauseMenu.pauseString[1] = "RESUME" ; 
+	pauseMenu.pauseString[2] = "QUIT" ; 
+	for (int i = 0 ; i < pauseMenu.numItems ; i ++ ) 
+	{
+		
+		pauseMenu.Skill_Items[i].SetRect (660 + 115 * i , 210) ; 
+		pauseMenu.pauseItem[i].LoadImg("HUD_image.png") ; 
+		pauseMenu.pauseItem[i].SetWidthHeight(235,123) ; 
+		pauseMenu.pauseItem[i].SetRect(220 + 260 * i , 450) ; 
+		pauseMenu.pauseText[i].SetColor(TextObject :: BLACK_TEXT) ; 
+		if (i % 2 == 0 ) pauseMenu.pauseText[i].SetRect(280 + 260 * i , 493 ) ; 
+		else pauseMenu.pauseText[i].SetRect(245 + 260 * i , 493 ) ; 
+		pauseMenu.pauseText[i].SetText(pauseMenu.pauseString[i]) ; 
+	}
+}
 
 int main(int arc, char* argv[])
 {
@@ -324,7 +387,12 @@ int main(int arc, char* argv[])
 	if (g_bkground == NULL)
 		return 0;
 	SDLCommonFunc::ApplySurface(g_bkground, g_screen, 0, 0);
+<<<<<<< Updated upstream
 	prepare();
+=======
+	menu_prepare();
+	prepare_pause () ;
+>>>>>>> Stashed changes
 	int x_mouse, y_mouse;
 	
 	bool is_quit = false;
@@ -353,6 +421,8 @@ int main(int arc, char* argv[])
 				switch (g_even.type)
 				{
 				case SDL_QUIT:
+					SDLCommonFunc ::CleanUp () ; 
+					SDL_Quit() ; 
 					return 1;
 				case SDL_MOUSEMOTION:
 					x_mouse = g_even.motion.x;
@@ -390,6 +460,7 @@ int main(int arc, char* argv[])
 			menu.guideBk.Show(g_screen);
 			
 
+<<<<<<< Updated upstream
 			while (SDL_PollEvent(&g_even)) 
 			{
 				switch (g_even.type)
@@ -422,6 +493,134 @@ int main(int arc, char* argv[])
 				return 0;
 
 		}
+=======
+		//// Pause Menu 
+		else if (g_stat == PAUSE) 
+		{
+			if (!pauseMenu.is_show)
+			{
+				human_object.prepare(g_stat) ;
+				for (int i = 0 ; i <= pauseMenu.num_f ; i ++) 
+				{
+					SDLCommonFunc :: ApplySurface (g_bkground , g_screen , 0 ,0 );
+					std :: string temp = "pngs/Appear/"+ std ::to_string (i) + ".png" ; 
+					pauseMenu.pauseBK.LoadImg(temp.c_str()) ; 
+					pauseMenu.pauseBK.Show(g_screen) ;  
+					if (SDL_Flip(g_screen) == -1)
+					return 0;
+					SDL_Delay(20) ;
+				}
+			}
+			SDLCommonFunc :: ApplySurface (g_bkground , g_screen, 0 ,0  ) ;
+			pauseMenu.is_show = true ;
+			pauseMenu.pauseBK.Show(g_screen) ;
+			pauseMenu.avatar_of_player.Show(g_screen) ; 
+			human_object.ShowStatic(g_screen) ; 
+			pauseMenu.Display_Skill.CreateGameText(pauseMenu.bodyFont,g_screen) ;
+			for (int i = 0 ;i < pauseMenu.numItems ; i ++ ) 
+			{
+				if (i < 2) 
+					{
+						pauseMenu.Menu_Title[i].CreateGameText(pauseMenu.pauseFont,g_screen) ;
+						pauseMenu.User_Data[i].CreateGameText(pauseMenu.bodyFont,g_screen);
+					}
+				pauseMenu.Skill_Items[i].Show(g_screen) ;
+				pauseMenu.pauseItem[i].Show(g_screen) ; 
+				pauseMenu.pauseText[i].CreateGameText(pauseMenu.pauseFont,g_screen) ; 
+			}
+			while (SDL_PollEvent (&g_even) && g_stat == PAUSE) 
+			{
+				int x_mouse = g_even.motion.x , y_mouse = g_even.motion.y ;
+				if (g_even.type == SDL_QUIT )
+				{
+					SDLCommonFunc :: CleanUp () ; 
+					SDL_Quit() ; 
+					return 0 ; 
+				}
+				else if (g_even.key.keysym.sym == SDLK_BACKSPACE ) 
+				{
+					pauseMenu.is_show = false ; 
+					g_stat = PLAYING ; 
+					human_object.prepare(g_stat) ; 
+					for (int i = 0 ; i <= pauseMenu.num_f ; i ++ ) 
+					{
+					SDLCommonFunc :: ApplySurface (g_bkground , g_screen , 0 , 0 ) ; 
+					std :: string temp = "pngs/Disappear/" + std :: to_string (i) + ".png" ;  
+					pauseMenu.pauseBK.LoadImg(temp.c_str()) ; 
+					pauseMenu.pauseBK.Show(g_screen) ; 
+					if (SDL_Flip(g_screen) == -1)
+					return 0;
+					SDL_Delay(20) ; 
+					}
+					break ; 
+				}
+				switch (g_even.type) 
+				{
+				case SDL_MOUSEMOTION :  
+					for (int i = 0 ; i < pauseMenu.numItems ; i ++ ) 
+					{
+						if (SDLCommonFunc :: CheckPointInRect (x_mouse , y_mouse , pauseMenu.pauseItem[i].GetRect())) 
+							pauseMenu.pauseText[i].SetColor(TextObject :: RED_TEXT ) ; 
+						else pauseMenu.pauseText[i].SetColor(TextObject :: BLACK_TEXT) ; 
+						//	
+						pauseMenu.pauseText[i].CreateGameText(pauseMenu.pauseFont,g_screen) ; 
+					if (SDL_Flip(g_screen) == -1)
+					return 0;
+					}
+					break ; 
+				case SDL_MOUSEBUTTONDOWN: 
+					for (int i = 0 ; i < pauseMenu.numItems ; i ++ ) 
+					{
+						if (SDLCommonFunc :: CheckPointInRect (x_mouse , y_mouse , pauseMenu.pauseItem[i].GetRect()))
+						{
+							switch (i) 
+							{
+							case 0 :
+								pauseMenu.is_show = false ; 
+								g_stat = START ;  
+								human_object.prepare(g_stat) ; 
+								for (int i = 0 ; i <= pauseMenu.num_f ; i ++ ) 
+								{
+									SDLCommonFunc :: ApplySurface (g_bkground , g_screen , 0 , 0 ) ; 
+									std :: string temp = "pngs/Disappear/" + std :: to_string (i) + ".png" ;  
+									pauseMenu.pauseBK.LoadImg(temp.c_str()) ; 
+									pauseMenu.pauseBK.Show(g_screen) ; 
+									if (SDL_Flip(g_screen) == -1)
+										return 0;
+									SDL_Delay(20) ; 
+								}
+								break ; 
+							case 1 : 					
+								pauseMenu.is_show = false ; 
+								g_stat = PLAYING ; 
+								human_object.prepare(g_stat) ; 
+								for (int i = 0 ; i <= pauseMenu.num_f ; i ++ ) 
+								{
+									SDLCommonFunc :: ApplySurface (g_bkground , g_screen , 0 , 0 ) ; 
+									std :: string temp = "pngs/Disappear/" + std :: to_string (i) + ".png" ;  
+									pauseMenu.pauseBK.LoadImg(temp.c_str()) ; 
+									pauseMenu.pauseBK.Show(g_screen) ; 
+									if (SDL_Flip(g_screen) == -1)
+										return 0;
+									SDL_Delay(20) ; 
+								}
+								break ;
+							case 2 : 
+								SDLCommonFunc :: CleanUp () ; 
+								SDL_Quit() ; 
+								return 0 ; 
+							} 
+					}
+					}
+				}
+			}
+
+				if (SDL_Flip(g_screen) == -1)
+				return 0;
+		}
+
+
+>>>>>>> Stashed changes
 
 
 
@@ -435,8 +634,14 @@ int main(int arc, char* argv[])
 					is_quit = true;
 					break;
 				}
+				if (g_even.key.keysym.sym == SDLK_ESCAPE)
+				{
+						g_stat = PAUSE ; 
+						break; 
+				}
 				human_object.HandleInputAction(g_even);
 			}
+			if (g_stat == PAUSE) continue ;
 			R1.gameLoop(is_quit, p_still_live, numLoop);
 			// Update screen
 			if (SDL_Flip(g_screen) == -1)
