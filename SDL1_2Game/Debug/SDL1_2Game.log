@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ﻿Build started 3/29/2024 2:19:27 PM.
      1>Project "C:\Users\ADMIN\Documents\Visual Studio 2012\Projects\SDL1_2Game\SDL1_2Game\SDL1_2Game.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
@@ -48,6 +49,33 @@
      1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\mainobject.cpp(143): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\mainobject.cpp(149): warning C4018: '<' : signed/unsigned mismatch
          main.cpp
+=======
+﻿Build started 4/1/2024 6:20:30 AM.
+     1>Project "C:\Users\ADMIN\Documents\GitHub\Milo_Knight_Game\SDL1_2Game\SDL1_2Game.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt AmoObject.cpp BaseObject.cpp Common_Function.cpp ImpTimer.cpp main.cpp MainObject.cpp TextObject.cpp ThreatObject.cpp UserInterface.cpp
+         UserInterface.cpp
+         ThreatObject.cpp
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\mainobject.h(127): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\threatobject.h(13): warning C4005: 'UNIT_STEP' : macro redefinition
+                 c:\users\admin\documents\github\milo_knight_game\sdl1_2game\mainobject.h(19) : see previous definition of 'UNIT_STEP'
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\threatobject.cpp(23): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\threatobject.cpp(38): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\threatobject.cpp(53): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\threatobject.cpp(61): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\threatobject.cpp(131): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\threatobject.cpp(141): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\threatobject.cpp(143): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\threatobject.cpp(150): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\threatobject.cpp(152): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+         TextObject.cpp
+         MainObject.cpp
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\mainobject.h(127): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\mainobject.cpp(128): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\mainobject.cpp(143): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\mainobject.cpp(149): warning C4018: '<' : signed/unsigned mismatch
+         main.cpp
+>>>>>>> Stashed changes
      1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\mainobject.h(127): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\threatobject.h(13): warning C4005: 'UNIT_STEP' : macro redefinition
                  c:\users\admin\documents\github\milo_knight_game\sdl1_2game\mainobject.h(19) : see previous definition of 'UNIT_STEP'
@@ -63,6 +91,9 @@
      1>c:\users\admin\documents\github\milo_knight_game\sdl1_2game\common_function.cpp(58): warning C4018: '<' : signed/unsigned mismatch
          BaseObject.cpp
          AmoObject.cpp
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
          Generating Code...
        Link:
@@ -77,6 +108,7 @@
          Debug\UserInterface.obj
      1>MSVCRTD.lib(cinitexe.obj) : warning LNK4098: defaultlib 'msvcrt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
          SDL1_2Game.vcxproj -> C:\Users\ADMIN\Documents\Visual Studio 2012\Projects\SDL1_2Game\Debug\SDL1_2Game.exe
      1>Done Building Project "C:\Users\ADMIN\Documents\Visual Studio 2012\Projects\SDL1_2Game\SDL1_2Game\SDL1_2Game.vcxproj" (Build target(s)).
 
@@ -90,4 +122,12 @@ Time Elapsed 00:00:02.45
 Build succeeded.
 
 Time Elapsed 00:00:06.04
+>>>>>>> Stashed changes
+=======
+         SDL1_2Game.vcxproj -> C:\Users\ADMIN\Documents\GitHub\Milo_Knight_Game\Debug\SDL1_2Game.exe
+     1>Done Building Project "C:\Users\ADMIN\Documents\GitHub\Milo_Knight_Game\SDL1_2Game\SDL1_2Game.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:08.73
 >>>>>>> Stashed changes

@@ -48,10 +48,13 @@ struct menuStruct
 	
 } menu;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 
 
 =======
+=======
+>>>>>>> Stashed changes
 struct PauseMenu 
 {
 	TTF_Font * pauseFont ;
@@ -70,6 +73,9 @@ struct PauseMenu
 	TextObject Menu_Title [2]; 
 	bool is_show ;  
 }pauseMenu;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 enum gameStatus 
@@ -375,6 +381,48 @@ void prepare_pause ()
 		pauseMenu.pauseText[i].SetText(pauseMenu.pauseString[i]) ; 
 	}
 }
+void prepare_pause () 
+{
+	pauseMenu.pauseBK.SetWidthHeight(970,750) ; 
+	pauseMenu.pauseBK.SetRect(-185,-335) ; 
+	pauseMenu.is_show = false ; 
+	pauseMenu.avatar_of_player.LoadImg("Avatar.jpg") ; 
+	pauseMenu.avatar_of_player.SetRect(220,180) ; 
+	pauseMenu.bodyFont = TTF_OpenFont("Mojang-Bold.ttf",20) ; 
+	pauseMenu.pauseFont = TTF_OpenFont("Mojang-Bold.ttf", 35);
+	pauseMenu.Display_Skill.SetText("Skill :") ; 
+	pauseMenu.Display_Skill.SetColor(TextObject::BLACK_TEXT) ; 
+	pauseMenu.Display_Skill.SetRect (660,180) ;
+	pauseMenu.Menu_Title[0].SetText("________PROFILE________") ; 
+	pauseMenu.Menu_Title[1].SetText("________SETTING________") ;
+	pauseMenu.User_Data[0].SetText("Mi-Lo Knight") ; 
+	pauseMenu.User_Data[1].SetText("Cre : deptrai2k5 (long nguyen) xautrai2k5 (minhnguyen)" ) ; 
+	for (int i = 0 ;i < 2 ; i ++ ) 
+	{
+	pauseMenu.Menu_Title[i].SetRect(230,120 + 245 * i) ; 
+	pauseMenu.Menu_Title[i].SetColor(TextObject :: WHITE_TEXT) ;
+	pauseMenu.User_Data[i].SetRect(205 - 10 * i , 330 + 300 * i) ;
+	pauseMenu.User_Data[i].SetColor(TextObject :: BLACK_TEXT) ; 
+	}
+	pauseMenu.Skill_Items[0].LoadImg("skillQ.png") ; 
+	pauseMenu.Skill_Items[1].LoadImg("skillE.png") ; 
+	pauseMenu.Skill_Items[2].LoadImg("skillUlt.png") ; 
+	pauseMenu.pauseString[0] = "MENU" ; 
+	pauseMenu.pauseString[1] = "RESUME" ; 
+	pauseMenu.pauseString[2] = "QUIT" ; 
+	for (int i = 0 ; i < pauseMenu.numItems ; i ++ ) 
+	{
+		
+		pauseMenu.Skill_Items[i].SetRect (660 + 115 * i , 210) ; 
+		pauseMenu.pauseItem[i].LoadImg("HUD_image.png") ; 
+		pauseMenu.pauseItem[i].SetWidthHeight(235,123) ; 
+		pauseMenu.pauseItem[i].SetRect(220 + 260 * i , 450) ; 
+		pauseMenu.pauseText[i].SetColor(TextObject :: BLACK_TEXT) ; 
+		if (i % 2 == 0 ) pauseMenu.pauseText[i].SetRect(280 + 260 * i , 493 ) ; 
+		else pauseMenu.pauseText[i].SetRect(245 + 260 * i , 493 ) ; 
+		pauseMenu.pauseText[i].SetText(pauseMenu.pauseString[i]) ; 
+	}
+}
 
 int main(int arc, char* argv[])
 {
@@ -392,6 +440,9 @@ int main(int arc, char* argv[])
 =======
 	menu_prepare();
 	prepare_pause () ;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 	int x_mouse, y_mouse;
 	
@@ -461,6 +512,7 @@ int main(int arc, char* argv[])
 			
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 			while (SDL_PollEvent(&g_even)) 
 			{
 				switch (g_even.type)
@@ -494,6 +546,8 @@ int main(int arc, char* argv[])
 
 		}
 =======
+=======
+>>>>>>> Stashed changes
 		//// Pause Menu 
 		else if (g_stat == PAUSE) 
 		{
@@ -620,6 +674,9 @@ int main(int arc, char* argv[])
 		}
 
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 
