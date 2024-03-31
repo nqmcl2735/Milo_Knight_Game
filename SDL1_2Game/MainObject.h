@@ -30,6 +30,12 @@
 #define STAT_POS_MENU_W 
 #define STAT_POS_MENU_H
 
+#define STAT_POS_NORMAL_W 
+#define STAT_POS_NORMAL_H 
+
+#define STAT_POS_MENU_W 
+#define STAT_POS_MENU_H
+
 class MainObject : public BaseObject 
 {
 public:
