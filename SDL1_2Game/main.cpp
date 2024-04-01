@@ -7,7 +7,7 @@
 #include "ImpTimer.h" 
 #include "TextObject.h"
 #include "UserInterface.h"
-#include <fstream>
+
 TTF_Font*  g_font_text = NULL;
 MainObject human_object;
 
@@ -33,8 +33,6 @@ bool Init()
 	}
 	return true;
 }
-
-
 struct menuStruct 
 {
 	TTF_Font* menu_font;
@@ -44,14 +42,7 @@ struct menuStruct
 	BaseObject menuArrow;
 	std::string menuString[numItems];
 	TextObject menuText[numItems];
-	BaseObject guideBk;
-	
 } menu;
-<<<<<<< Updated upstream
-
-
-
-=======
 struct PauseMenu 
 {
 	TTF_Font * pauseFont ;
@@ -70,7 +61,6 @@ struct PauseMenu
 	TextObject Menu_Title [2]; 
 	bool is_show ;  
 }pauseMenu;
->>>>>>> Stashed changes
 
 enum gameStatus 
 {
@@ -296,16 +286,11 @@ struct round
 		//
 	}
 };
-void prepare()
+void menu_prepare()
 {
-	//////menuBK
 	menu.menuBk.SetWidthHeight(1056, 672);
 	menu.menuBk.SetRect(72, 64);
 	menu.menuBk.LoadImg("menu.png");
-
-
-
-	///////menuITEM
 	menu.menuArrow.LoadImg("arrow.png");
 	menu.menuString[0] = "START";
 	menu.menuString[1] = "NEW  GAME";
@@ -322,16 +307,9 @@ void prepare()
 		menu.menuText[i].SetText(menu.menuString[i]);
 		menu.menuText[i].SetColor(TextObject::BLACK_TEXT);
 		menu.menuText[i].SetRect(x + 50, y + 35);
+
 	}
 
-
-
-
-	/////menuGUIDE
-	menu.guideBk.SetRect(246, 46);
-	menu.guideBk.LoadImg("guideBK.png");
-	
-	
 }
 void prepare_pause () 
 {
@@ -387,12 +365,8 @@ int main(int arc, char* argv[])
 	if (g_bkground == NULL)
 		return 0;
 	SDLCommonFunc::ApplySurface(g_bkground, g_screen, 0, 0);
-<<<<<<< Updated upstream
-	prepare();
-=======
 	menu_prepare();
 	prepare_pause () ;
->>>>>>> Stashed changes
 	int x_mouse, y_mouse;
 	
 	bool is_quit = false;
@@ -409,6 +383,7 @@ int main(int arc, char* argv[])
 
 		/////// SHOW MENU
 		if(g_stat == START){
+			SDLCommonFunc :: ApplySurface (g_bkground , g_screen ,0,0) ; 
 			menu.menuBk.Show(g_screen);
 			SDL_Rect tmp = menu.menuArrow.GetRect();
 			if(tmp.x != 0) menu.menuArrow.Show(g_screen);
@@ -442,7 +417,7 @@ int main(int arc, char* argv[])
 						{
 							if(i == 0) g_stat = PLAYING;
 							else if(i == 1) g_stat = PLAYING;
-							else if(i == 2) g_stat = GUIDE;
+							else ;
 						}
 					break;
 				default:
@@ -453,47 +428,7 @@ int main(int arc, char* argv[])
 				return 0;
 		}
 
-		//////guide page
-		else if(g_stat == GUIDE)
-		{
-			menu.menuBk.Show(g_screen);
-			menu.guideBk.Show(g_screen);
-			
 
-<<<<<<< Updated upstream
-			while (SDL_PollEvent(&g_even)) 
-			{
-				switch (g_even.type)
-				{
-				case SDL_QUIT:
-					return 1;	
-				case SDL_KEYDOWN:
-					{
-					switch(g_even.key.keysym.sym)
-					case SDLK_ESCAPE:
-						g_stat = START;
-						break;
-
-
-
-					break;
-					}
-				default:
-					break;
-				}
-			}
-
-			
-			
-
-
-
-
-			if (SDL_Flip(g_screen) == -1)
-				return 0;
-
-		}
-=======
 		//// Pause Menu 
 		else if (g_stat == PAUSE) 
 		{
@@ -620,7 +555,6 @@ int main(int arc, char* argv[])
 		}
 
 
->>>>>>> Stashed changes
 
 
 
@@ -651,9 +585,6 @@ int main(int arc, char* argv[])
 
 
 
-		
-
-
 
 		//////FPS handle
 		int real_imp_time = fps_timer.get_tick();
@@ -664,7 +595,6 @@ int main(int arc, char* argv[])
 			SDL_Delay(delay_time);
 		}
 		numLoop ++;
-		
 	}
 	//clean up variables in program
 	SDLCommonFunc::CleanUp();
