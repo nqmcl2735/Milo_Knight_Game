@@ -31,11 +31,7 @@ void SDLCommonFunc::ApplySurface(SDL_Surface* src, SDL_Surface* des, int x, int 
 
 bool SDLCommonFunc::CheckPointInRect(const int & x,const int & y, const SDL_Rect& object)
 {
-	int lf = object.x;
-	int rt = object.x + object.w;
-	int tp = object.y;
-	int bt = object.y + object.h;
-	return (lf < x && x < rt && tp < y && y < bt);
+	return ( object.x < x && x < object.x + object.w &&object.y < y && y < object.y + object.h);
 }
 bool SDLCommonFunc::CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2) 
 {
@@ -48,7 +44,10 @@ bool SDLCommonFunc::CheckCollision(const SDL_Rect& object1, const SDL_Rect& obje
 	for (int i = 0; i < v.size(); i ++)
 	{
 		std::pair<int, int> p = v.at(i);
-		if(CheckPointInRect(p.first, p.second, object2)) return 1;
+		if(CheckPointInRect(p.first, p.second, object2)){
+			v.clear();
+			return 1;
+		}
 	}
 	//obj2 < obj1
 	v.push_back(std::make_pair(object2.x, object2.y));
@@ -58,8 +57,13 @@ bool SDLCommonFunc::CheckCollision(const SDL_Rect& object1, const SDL_Rect& obje
 	for (int i = 0; i < v.size(); i ++)
 	{
 		std::pair<int, int> p = v.at(i);
-		if(CheckPointInRect(p.first, p.second, object1)) return 1;
+		if(CheckPointInRect(p.first, p.second, object1)) 
+		{
+			v.clear();
+			return 1;
+		}
 	}
+	v.clear();
 	return 0;
 }
 void SDLCommonFunc::CleanUp()

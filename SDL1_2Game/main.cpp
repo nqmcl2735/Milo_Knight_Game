@@ -7,7 +7,8 @@
 #include "ImpTimer.h" 
 #include "TextObject.h"
 #include "UserInterface.h"
-
+#include "TileObject.h"
+#include "fstream"
 TTF_Font*  g_font_text = NULL;
 MainObject human_object;
 
@@ -42,6 +43,8 @@ struct menuStruct
 	BaseObject menuArrow;
 	std::string menuString[numItems];
 	TextObject menuText[numItems];
+
+	BaseObject GuideBK;
 } menu;
 struct PauseMenu 
 {
@@ -73,108 +76,117 @@ int g_stat = START;
 
 
 
-
 struct round 
 {
-	enum round_lvl
-	{
-		R1,
-		R2,
-		R3,
-		R4,
-		R5
-	};
 	enum round_status
 	{
 		BEFORE,
 		RUNNING,
 		DONEROUND
 	};
-	
+	int num_round;
+
 	int r_mark;
 	int r_stat;
-	int r_lvl;
-	round(int level)
+
+	int NUM_THREAT;
+	int NUM_TILE;
+	
+	// room objects
+	BaseObject *room_object;
+	BaseObject *border_object;
+	BaseObject *Lgate_object;
+	BaseObject *Rgate_object;
+	BaseObject *road_object;
+	round(const int & n_round)
 	{
+		num_round = n_round;
 		r_mark = 0;
-		r_lvl = level;
 		r_stat = BEFORE;
 	}
-	// room objects
-	BaseObject room_object;
-	BaseObject border_object;
-	BaseObject Lgate_object;
-	BaseObject Rgate_object;
-	BaseObject road_object;
+	~round()
+	{
+		delete room_object;
+		delete border_object;
+		delete Lgate_object;
+		delete Rgate_object;
+		delete road_object;
+	}
 	
 	std::vector<ThreatObject*> p_threats;
-
+	std::vector<TileObject*> p_tiles;
 	//test outside game loop
-	void Move(BaseObject & gate, int dir)
+	void Move(BaseObject * gate, int dir)
 	{
-		SDL_Rect tmp = gate.GetRect();
-		tmp.y += 5 * dir;
-		gate.SetRect(tmp.x, tmp.y);
+		gate->SetRect(gate->GetRect().x, gate->GetRect().y + 5 * dir);
 	}
 	void before_frame()
 	{
-		SDL_Rect tmp = Lgate_object.GetRect();
-		if(tmp.y >= 165) Move(Lgate_object, -1);
+		if(Lgate_object->GetRect().y >= 165) Move(Lgate_object, -1);
 	}
 	void running_frame()
-	{
-		SDL_Rect tmp = Lgate_object.GetRect();
-		if(tmp.y < 335) Move(Lgate_object, 1);
+	{if(Lgate_object->GetRect().y < 335) Move(Lgate_object, 1);
 	}
 	void doneround_frame()
 	{
-		SDL_Rect tmp = Rgate_object.GetRect();
+		SDL_Rect tmp = Rgate_object->GetRect();
 		if(tmp.y >= 165) Move(Rgate_object, -1);
 	}
 	void include_threat()
 	{
+		std::ifstream fi (("LEVEL1/ROUND" + std::to_string(num_round) + ".txt").c_str());
+		fi>> NUM_THREAT;
 		for (int t = 0; t < NUM_THREAT; t ++)
 		{
-			ThreatObject *p_threat = new ThreatObject;
-			p_threat->LoadImg("newDemonL.png");
-			int rand_y = Random(ROOM_Y, ROOM_Y + ROOM_HEIGHT - THREAT_HEIGHT);
-			p_threat->SetRect(ROOM_X + ROOM_WIDTH - THREAT_WIDTH - 10, rand_y);
+			int type; fi >> type;
+			ThreatObject *p_threat = new ThreatObject(type);
 			p_threats.push_back(p_threat);
 		}
+		fi>>NUM_TILE;
+		for (int t = 0; t < NUM_TILE; t ++)
+		{
+			int type, x, y; fi >> type >> x >> y;
+			TileObject *p_tile = new TileObject(type, x, y);
+			p_tiles.push_back(p_tile);
+		}
+
 	}
 	void cleanup_threat()
 	{
 		p_threats.clear();
+		p_tiles.clear();
+		
 	}
 	
 	//
 	void preapre()
 	{
 		
-		room_object.SetRect(150, 25);
-		room_object.LoadImg("room0.png");
-		border_object.SetRect(150, 25);
-		border_object.LoadImg("border.png");
-		Lgate_object.SetRect(150, 335);
-		Lgate_object.SetWidthHeight(25, 145);
-		Lgate_object.LoadImg("Gate.png");
-		Rgate_object.SetRect(1025, 335);
-		Rgate_object.SetWidthHeight(25, 145);
-		Rgate_object.LoadImg("Gate.png");
-		road_object.SetRect(0, 310);
-		road_object.LoadImg("road.png");
+		room_object = new BaseObject;
+		border_object = new BaseObject;
+		Lgate_object = new BaseObject;
+		Rgate_object = new BaseObject;
+		road_object = new BaseObject;
+
+		room_object->SetRect(150, 25);
+		room_object->LoadImg("room0.png");
+		border_object->SetRect(150, 25);
+		border_object->LoadImg("border.png");
+		Lgate_object->SetRect(150, 335);
+		Lgate_object->SetWidthHeight(25, 145);
+		Lgate_object->LoadImg("Gate.png");
+		Rgate_object->SetRect(1025, 335);
+		Rgate_object->SetWidthHeight(25, 145);
+		Rgate_object->LoadImg("Gate.png");
+		road_object->SetRect(0, 310);
+		road_object->LoadImg("road.png");
 		
-
-
-		human_object.SetRect(0, 330);
-		human_object.LoadImg("knight_animsR.png");
-		human_object.set_x_drc(1);
-		human_object.set_y_drc(0);
 		human_object.prepare(g_stat);
+		
 		
 	}
 
-	void gameLoop(bool &is_quit, bool &p_still_live, long long numLoop)
+	bool gameLoop(bool &is_quit, bool &p_still_live, long long numLoop)
 	{
 		
 		//update round_status
@@ -184,6 +196,7 @@ struct round
 			if(tmp.x >= 180){ 
 				r_stat = RUNNING;
 				include_threat();
+				return 0;
 			}
 		}
 		else if(r_stat == RUNNING)
@@ -192,6 +205,7 @@ struct round
 			{
 				cleanup_threat();
 				r_stat = DONEROUND;
+				return 0;
 			}
 		}
 		// apply frame
@@ -203,73 +217,119 @@ struct round
 			doneround_frame();
 		//Aplly Background
 		SDLCommonFunc::ApplySurface(g_bkground, g_screen, 0, 0);
-		road_object.Show(g_screen);
-		room_object.Show(g_screen);
-		border_object.Show(g_screen);
-		Lgate_object.Show(g_screen);
-		Rgate_object.Show(g_screen);
+		road_object->Show(g_screen);
+		room_object->Show(g_screen);
+		border_object->Show(g_screen);
+		Lgate_object->Show(g_screen);
+		Rgate_object->Show(g_screen);
 		
 		//Implement main object
+		if(r_stat == RUNNING)
+			for (int i = 0; i < NUM_TILE; i ++)
+			{
+				TileObject *p_tile = p_tiles.at(i);
+				p_tile->Show(g_screen);
+			}
 		human_object.Show(g_screen);
-		human_object.HandleMove(Lgate_object, Rgate_object);
+		if(human_object.HandleMove(Lgate_object, Rgate_object, p_tiles)) return 1;
 		human_object.MakeAmo(g_screen);
 		human_object.coolProcess();
 		
 
 		//xu li va cham dan vs main
+		if(r_stat != RUNNING) return 0;
 		
+		bool is_slow = 0;
+		bool is_poison = 0;
 		for (int i = 0; i < p_threats.size(); i ++)
 		{
 			ThreatObject *p_threat = p_threats.at(i);
 			if(p_threat->get_is_alive()){
-				std::vector<AmoObject*> amo_list = p_threat->GetAmoList();
-				for (int am = 0; am < amo_list.size(); am ++)
-				{
-						AmoObject* p_amo = amo_list.at(am);
-					if(p_amo && p_amo -> get_is_move())
+				//gun
+				if(p_threat->get_type() == ThreatObject::GUN_THREAT){
+					std::vector<AmoObject*> amo_list = p_threat->GetAmoList();
+					for (int am = 0; am < amo_list.size(); am ++)
 					{
-						bool is_col = SDLCommonFunc::CheckCollision(p_amo->GetRect(), human_object.GetRect());
-						if(is_col)
+							AmoObject* p_amo = amo_list.at(am);
+						if(p_amo && p_amo -> get_is_move())
 						{
-							if(human_object.get_shield() > 0)
+							bool is_col = SDLCommonFunc::CheckCollision(p_amo->GetRect(), human_object.GetRect());
+							if(is_col)
 							{
-								int p_shield = human_object.get_shield();
-								human_object.set_shield(max(p_shield - p_threat->get_pow(), 0));
+								if(human_object.get_shield() > 0)
+								{
+									int p_shield = human_object.get_shield();
+									human_object.set_shield(max(p_shield - p_threat->get_pow(), 0));
+								}
+								else 
+								{
+									human_object.change_health((-1) * (100.0/100.0 * p_threat->get_pow()));
+								}
+								if(human_object.get_health() <= 0){
+									p_still_live = 0;
+	
+									break;
+								}
+								if(am < amo_list.size()) amo_list.erase(amo_list.begin() + am);
+								p_threat->SetAmoList(amo_list);
 							}
-							else 
-							{
-								human_object.change_health((-1) * (100.0/100.0 * p_threat->get_pow()));
-							}
-							if(human_object.get_health() <= 0){
-								p_still_live = 0;
-								is_quit = 1;
-								break;
-							}
-							if(am < amo_list.size()) amo_list.erase(amo_list.begin() + am);
-							p_threat->SetAmoList(amo_list);
 						}
+						if(p_still_live == 0) return 0;
 					}
-					if(p_still_live == 0) return;
+					if(p_still_live == 0) return 0;
 				}
-				if(p_still_live == 0) return;
+				//
+				else if(p_threat->get_type() == ThreatObject::TANK_THREAT)
+				{
+					if(SDLCommonFunc::CheckCollision(human_object.GetRect(), p_threat->GetRect()))
+					{
+						is_poison = 1;
+						is_slow = 1;
+					}
+				}
 			}
 		}
-		if(p_still_live == 0) return;
+		if(is_slow)  human_object.set_slow(1);
+		if(is_poison)
+			human_object.set_poison(1);
+		if(human_object.get_poison()){
+			if(human_object.get_shield() > 0)
+			{
+				int p_shield = human_object.get_shield();
+				human_object.set_shield(max(p_shield - 1, 0));
+			}
+			else human_object.change_health((-1) * (100.0/100.0 * 1));
+			if(human_object.get_health() <= 0) 
+				p_still_live = 0;
+		}
+		if(p_still_live == 0) return 0;
 		//
 
 		// Implement threat object
 		for (int i = 0; i < p_threats.size(); i ++)
 		{
-			std::vector<ThreatObject*> threat_list = p_threats;
-			ThreatObject *p_threat = threat_list.at(i);
+			//std::vector<ThreatObject*> threat_list = p_threats;
+			ThreatObject *p_threat = p_threats.at(i);
 			if(p_threat->get_is_alive()){
 				p_threat->Show(g_screen);
-				p_threat->CoolProcess();
-				p_threat->ChangeDir();
-				AmoObject* p_amo = new AmoObject;
-				p_threat->InitAmo(p_amo);
-				p_threat->HandleMove(ROOM_X + ROOM_WIDTH - THREAT_WIDTH, SCREEN_HEIGHT);
-				p_threat->MakeAmo(g_screen, SCREEN_WIDTH, SCREEN_HEIGHT);
+				if(p_threat->get_type() == ThreatObject::GUN_THREAT){
+					p_threat->CoolProcess();
+					p_threat->ChangeDir(human_object);
+					AmoObject* p_amo = new AmoObject;
+					if(!p_threat->InitAmo(p_amo))
+					{
+						delete p_amo;
+					}
+					p_threat->HandleMove(p_tiles);
+					p_threat->MakeAmo(g_screen, SCREEN_WIDTH, SCREEN_HEIGHT);
+				}
+				else if (p_threat->get_type() == ThreatObject::TANK_THREAT)
+				{
+					p_threat->frame_load();
+					p_threat->CoolProcess();
+					p_threat->ChangeDir(human_object);
+					p_threat->HandleMove(p_tiles);
+				}
 				// xu li va cham dan vs threat
 				if(!p_threat->checkAmour(human_object))
 				{
@@ -279,8 +339,8 @@ struct round
 				}
 			}
 		}
-		 human_object.ShowStatic(g_screen);
-		
+		 human_object.ShowStatic(g_screen, 1);
+		return 0;
 		//test in game loop
 		 
 		//
@@ -292,7 +352,7 @@ void menu_prepare()
 	menu.menuBk.SetRect(72, 64);
 	menu.menuBk.LoadImg("menu.png");
 	menu.menuArrow.LoadImg("arrow.png");
-	menu.menuString[0] = "START";
+	
 	menu.menuString[1] = "NEW  GAME";
 	menu.menuString[2] = "HOW  TO  PLAY";
 	menu.menu_font = TTF_OpenFont("Mojang-Bold.ttf", 30);
@@ -309,6 +369,9 @@ void menu_prepare()
 		menu.menuText[i].SetRect(x + 50, y + 35);
 
 	}
+	menu.GuideBK.LoadImg("guideBK.png");
+	menu.GuideBK.SetRect(246, 46);
+
 
 }
 void prepare_pause () 
@@ -339,7 +402,7 @@ void prepare_pause ()
 	pauseMenu.Skill_Items[2].LoadImg("skillUlt.png") ; 
 	pauseMenu.pauseString[0] = "MENU" ; 
 	pauseMenu.pauseString[1] = "RESUME" ; 
-	pauseMenu.pauseString[2] = "QUIT" ; 
+	pauseMenu.pauseString[2] = "H 2 P" ; 
 	for (int i = 0 ; i < pauseMenu.numItems ; i ++ ) 
 	{
 		
@@ -353,7 +416,7 @@ void prepare_pause ()
 		pauseMenu.pauseText[i].SetText(pauseMenu.pauseString[i]) ; 
 	}
 }
-
+int max_round = 0;
 int main(int arc, char* argv[])
 {
 
@@ -366,14 +429,15 @@ int main(int arc, char* argv[])
 		return 0;
 	SDLCommonFunc::ApplySurface(g_bkground, g_screen, 0, 0);
 	menu_prepare();
-	prepare_pause () ;
+	prepare_pause ();
 	int x_mouse, y_mouse;
 	
 	bool is_quit = false;
 	bool p_still_live = 1;
 	long long numLoop = 0;
-	round R1(0);
-	R1.preapre();
+	max_round = 0;
+	round *now_round = nullptr;
+	bool is_first_move = 0;
 	while (!is_quit) 
 	{
 		fps_timer.start();
@@ -383,10 +447,15 @@ int main(int arc, char* argv[])
 
 		/////// SHOW MENU
 		if(g_stat == START){
-			SDLCommonFunc :: ApplySurface (g_bkground , g_screen ,0,0) ; 
+			std::ifstream fi("checkpoint.txt");
+			int has_cp; fi >> has_cp;
+			if(has_cp) 
+				menu.menuString[0] = "CONTINUE";
+			else menu.menuString[0] = "START";
+			menu.menuText[0].SetText(menu.menuString[0]);
+			SDLCommonFunc :: ApplySurface (g_bkground , g_screen ,0,0); 
 			menu.menuBk.Show(g_screen);
-			SDL_Rect tmp = menu.menuArrow.GetRect();
-			if(tmp.x != 0) menu.menuArrow.Show(g_screen);
+			if(menu.menuArrow.GetRect().x != 0) menu.menuArrow.Show(g_screen);
 			for (int i = 0; i < menu.numItems; i ++){
 				menu.menuItems[i].Show(g_screen);
 				menu.menuText[i].CreateGameText(menu.menu_font, g_screen);
@@ -415,9 +484,37 @@ int main(int arc, char* argv[])
 					for (int i = 0; i < menu.numItems; i ++)
 						if(SDLCommonFunc::CheckPointInRect(x_mouse, y_mouse, menu.menuItems[i].GetRect()))
 						{
-							if(i == 0) g_stat = PLAYING;
-							else if(i == 1) g_stat = PLAYING;
-							else ;
+							if(i == 0){ 
+								if(has_cp == 0) {
+									g_stat = PLAYING;
+									human_object.reset(0);
+									max_round = 0;
+									if(now_round != nullptr) delete now_round;
+									now_round = new round(0);
+									now_round->preapre();
+								}
+								else if (has_cp == 1)
+								{
+									g_stat = PLAYING;
+									fi >> max_round;
+									int health, AD, AP;
+									fi >> health >> AD >> AP;
+									human_object.load_file(health, AD, AP);
+									if(now_round != nullptr) delete now_round;
+									now_round = new round(max_round);
+									now_round->preapre();
+									fi.close();
+								}
+							}
+							else if(i == 1) {
+								g_stat = PLAYING;
+								human_object.reset(0);
+								max_round = 0;
+								if(now_round != nullptr) delete now_round;
+								now_round = new round(0);
+								now_round->preapre();
+							}
+							else if (i == 2) g_stat = GUIDE;
 						}
 					break;
 				default:
@@ -450,7 +547,7 @@ int main(int arc, char* argv[])
 			pauseMenu.is_show = true ;
 			pauseMenu.pauseBK.Show(g_screen) ;
 			pauseMenu.avatar_of_player.Show(g_screen) ; 
-			human_object.ShowStatic(g_screen) ; 
+			human_object.ShowStatic(g_screen, 0) ; 
 			pauseMenu.Display_Skill.CreateGameText(pauseMenu.bodyFont,g_screen) ;
 			for (int i = 0 ;i < pauseMenu.numItems ; i ++ ) 
 			{
@@ -524,6 +621,9 @@ int main(int arc, char* argv[])
 										return 0;
 									SDL_Delay(20) ; 
 								}
+								/*
+								them option save file 
+								*/
 								break ; 
 							case 1 : 					
 								pauseMenu.is_show = false ; 
@@ -541,19 +641,44 @@ int main(int arc, char* argv[])
 								}
 								break ;
 							case 2 : 
-								SDLCommonFunc :: CleanUp () ; 
-								SDL_Quit() ; 
-								return 0 ; 
+								g_stat = GUIDE;
+								break;
 							} 
 					}
 					}
 				}
 			}
-
 				if (SDL_Flip(g_screen) == -1)
 				return 0;
 		}
 
+
+
+
+
+
+		///guide
+		else if (g_stat == GUIDE)
+		{
+			SDLCommonFunc::ApplySurface(g_bkground, g_screen, 0, 0);
+			while (SDL_PollEvent(&g_even)) 
+			{	
+				if (g_even.type == SDL_QUIT)
+				{
+					is_quit = true;
+					break;
+				}
+				if (g_even.key.keysym.sym == SDLK_ESCAPE)
+				{
+					human_object.prepare(g_stat);
+					g_stat = START; 
+					break; 
+				}
+			}
+			menu.GuideBK.Show(g_screen);
+			if (SDL_Flip(g_screen) == -1)
+				return 0;
+		}
 
 
 
@@ -571,15 +696,35 @@ int main(int arc, char* argv[])
 				if (g_even.key.keysym.sym == SDLK_ESCAPE)
 				{
 						g_stat = PAUSE ; 
+						human_object.stop();
 						break; 
 				}
-				human_object.HandleInputAction(g_even);
+				if(is_first_move == 0) human_object.HandleInputAction(g_even);
+				else is_first_move = 0;
+				
 			}
 			if (g_stat == PAUSE) continue ;
-			R1.gameLoop(is_quit, p_still_live, numLoop);
+			if(now_round->gameLoop(is_quit, p_still_live, numLoop))
+			{
+				
+				human_object.reset(1);
+				human_object.stop();
+				max_round ++;
+				delete now_round;
+				now_round = new round(max_round);
+				now_round->preapre();
+				is_first_move = 1;
+			}
 			// Update screen
 			if (SDL_Flip(g_screen) == -1)
 				return 0;
+			if(p_still_live == 0){
+				/*
+				them option luu file
+				*/
+				g_stat = START;
+				p_still_live = 1;
+			}
 		}
 		
 

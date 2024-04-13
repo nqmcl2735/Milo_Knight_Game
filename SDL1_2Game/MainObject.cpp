@@ -15,7 +15,9 @@ MainObject::MainObject()
 	coolDownQ_ = 0;
 	coolDownE_ = 0;
 	coolDownU_ = 0;
-	UNIT_STEP = 3;
+	UNIT_STEP = 10;
+	is_slow = 0;
+	is_poison = 0;
 }
 
 MainObject::~MainObject()
@@ -106,21 +108,71 @@ void MainObject::HandleInputAction(SDL_Event events)
 	}
 }
 
-void MainObject::HandleMove(const BaseObject & Lgate_object,const BaseObject & Rgate_object)
+bool MainObject::HandleMove(BaseObject * Lgate_object,BaseObject * Rgate_object, const std::vector<TileObject*> & p_tiles)
 {
-	rect_.x += x_val_;
-	rect_.y += y_val_;
-	SDL_Rect g_Lrect = Lgate_object.GetRect();
-	SDL_Rect g_Rrect = Rgate_object.GetRect();
+
+	if(is_slow) rect_.x += x_val_/2;
+	else rect_.x += x_val_;
+	if(is_slow) rect_.y += y_val_/2;
+	else rect_.y += y_val_;
+	SDL_Rect g_Lrect = Lgate_object->GetRect();
+	SDL_Rect g_Rrect = Rgate_object->GetRect();
 	if(rect_.y >= GATE_TOP && rect_.y <= GATE_BOT) 
 	{
 		if(SDLCommonFunc::CheckCollision(rect_, g_Lrect) || SDLCommonFunc::CheckCollision(rect_, g_Rrect))
-			rect_.x -= x_val_;
+			if(is_slow) rect_.x -= x_val_/2;
+			else rect_.x -= x_val_;
 	}
 	else if(rect_.y < ROOM_Y || rect_.y + HEIGHT_MAIN_OBJECT > ROOM_Y + ROOM_HEIGHT || rect_.x < ROOM_X || rect_.x + WIDTH_MAIN_OBJECT > ROOM_X + ROOM_WIDTH){
-			rect_.y -= y_val_;
-			rect_.x -= x_val_;
+			if(is_slow) rect_.x -= x_val_/2;
+			else rect_.x -= x_val_;
+			if(is_slow) rect_.y -= y_val_/2;
+			else rect_.y -= y_val_;
 	}
+	for(TileObject * p_tile : p_tiles)
+	{
+		if(SDLCommonFunc::CheckCollision(rect_, p_tile->GetRect())) 
+		{
+			switch (p_tile->get_type())
+			{
+			case TileObject::BRICK :
+				if(is_slow) rect_.x -= x_val_/2;
+				else rect_.x -= x_val_;
+				if(is_slow) rect_.y -= y_val_/2;
+				else rect_.y -= y_val_;
+				break;
+			
+			default:
+				break;
+			}
+		}
+	}
+	is_slow = 0;
+	is_poison = 0;
+	for(TileObject * p_tile : p_tiles)
+	{
+		if(SDLCommonFunc::CheckCollision(rect_, p_tile->GetRect())) 
+		{
+			switch (p_tile->get_type())
+			{
+			case TileObject::ICE :
+				is_slow = 1;
+				break;
+			case TileObject::FIRE :
+				is_poison = 1;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	if(rect_.x > SCREEN_WIDTH){ 
+		x_val_ = 0;
+		y_val_ = 0;
+		return 1;
+	}
+	return 0;
 	//
 }
 
@@ -156,9 +208,10 @@ void MainObject::MakeAmo(SDL_Surface* des)
 		}
 	}
 }
-void MainObject::ShowStatic(SDL_Surface * des)
+void MainObject::ShowStatic(SDL_Surface * des, const int & x)
 {
 	UI.process(health_, 600,
-				shield_, 150,		
-				des);
+				shield_, 150,
+				AD_pow_, AP_pow_,
+				des, x);
 }

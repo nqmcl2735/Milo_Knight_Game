@@ -6,6 +6,8 @@
 #include "AmoObject.h"
 #include "TextObject.h"
 #include "UserInterface.h"
+#include "fstream"
+#include "TileObject.h"
 #include <vector>
 
 #define WIDTH_MAIN_OBJECT 60
@@ -44,7 +46,7 @@ public:
 	~MainObject();
 
 	void HandleInputAction(SDL_Event events);
-	void HandleMove(const BaseObject & Lgate_object,const BaseObject & Rgate_object);
+	bool HandleMove(BaseObject * Lgate_object,BaseObject * Rgate_object, const std::vector<TileObject*> & p_tiles);
 	void MakeAmo(SDL_Surface* des);
 	void SetAmoList(std::vector<AmoObject*> amo_list) {
 		p_amo_list_ = amo_list;
@@ -147,6 +149,7 @@ public:
 	void set_AP_pow(const int & x) {AP_pow_ = x;}
 	int get_shield() const {return shield_;}
 	void set_shield(const int & x) {shield_ = x;}
+	
 
 	void coolProcess()
 	{
@@ -159,9 +162,56 @@ public:
 		else UI.Minus_Pos = 0 ; 
 		UI.prepare();
 	}
-
-	void ShowStatic(SDL_Surface * des); 
-	
+	void set_slow(const int & slow)
+	{
+		is_slow = slow;
+	}
+	void set_poison(const int & poison)
+	{
+		is_poison = poison;
+	}
+	int get_poison () const {return is_poison;}
+	void ShowStatic(SDL_Surface * des, const int & x); 
+	void stop()
+	{
+		x_val_ = 0;
+		y_val_ = 0;
+	}
+	void reset(const bool & keep)
+	{
+		SetRect(0, 330);
+		LoadImg("knight_animsR.png");
+		set_x_drc(1);
+		set_y_drc(0);
+		x_val_ = 0;
+		y_val_ = 0;
+		shield_ = 150;
+		coolDownQ_ = 0;
+		coolDownE_ = 0;
+		coolDownU_ = 0;
+		if(keep == 0)
+		{
+			health_ = 600;
+			AD_pow_ = 60;
+			AP_pow_ = 30;
+		}
+	}
+	void load_file(const int & health, const int & AD, const int & AP)
+	{
+		SetRect(0, 330);
+		LoadImg("knight_animsR.png");
+		health_ = health;
+		AD_pow_ = AD;
+		AP_pow_ = AP;
+		set_x_drc(1);
+		set_y_drc(0);
+		x_val_ = 0;
+		y_val_ = 0;
+		shield_ = 150;
+		coolDownQ_ = 0;
+		coolDownE_ = 0;
+		coolDownU_ = 0;
+	}
 private:
 	int x_val_;
 	int y_val_;
@@ -182,6 +232,8 @@ private:
 	int coolDownE_;
 	int coolDownU_;
 
+	int is_slow;
+	int is_poison;
 	UserInterface UI;
 
 };
