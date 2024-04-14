@@ -16,7 +16,7 @@
   + Using `Q` to fire a damaging bolt of energy scale by your AD power
   + Using `E` to fire an orb that sign the enemy hit in 3 seconds . If player hits an signed enemy by another abilities, unsign and deals damage scale by your AP power.
   + Using `SPACE` to fire a powerful barrage of energy that deals damage to each unit it passes through scale by your AP power.
-## Store & Items
+## Store & Items(Not yet include, please wait for next update)
 - Each times before you reach to an room, Store will be open, you can use your money to buy new items.
 ## About Game
 - This Game is built with OOP system which I learned from [`here`](https://www.youtube.com/@PhatTrienPhanMem123AZ).
