@@ -23,8 +23,8 @@ ThreatObject::ThreatObject(const int & type)
 	else if(type == TANK_THREAT)
 	{
 		frame = 0;
-		rect_.x = ROOM_X + ROOM_WIDTH - TANK_WIDTH - 10;
-		rect_.y = SCREEN_HEIGHT/2;
+		rect_.x = ROOM_X + ROOM_WIDTH - TANK_WIDTH - 2;
+		rect_.y = SCREEN_HEIGHT/2 - 180;
 		rect_.w = TANK_WIDTH;
 		rect_.h = TANK_HEIGHT;
 		x_val_ = 0;
@@ -170,22 +170,15 @@ void ThreatObject:: HandleMove(const std::vector<TileObject*> & p_tiles)
 		{
 			rect_.y -= y_val_;
 		}
-		for(TileObject * p_tile : p_tiles)
+		for(TileObject * p_tile : p_tiles) if(p_tile->get_type() == TileObject::BRICK)
 		{
 			if(SDLCommonFunc::CheckCollision(rect_, p_tile->GetRect())) 
 			{
-				switch (p_tile->get_type())
-				{
-				case TileObject::BRICK :
-					rect_.x -= x_val_;
-					rect_.y -= y_val_;
-
-					//try another way
-					set_y_val(0);
-					break;
-				default:
-					break;
-				}
+				rect_.x -= x_val_;
+				rect_.y -= y_val_;
+				//try another way
+				set_x_val(Random(-1, 1) * UNIT_STEP);
+				set_y_val(Random(-1, 1) * UNIT_STEP);
 			}
 		}
 	}
@@ -201,23 +194,18 @@ void ThreatObject:: HandleMove(const std::vector<TileObject*> & p_tiles)
 			rect_.y -= y_val_;
 			r_pos.y -= y_val_;
 		}
-		for(TileObject * p_tile : p_tiles)
+		for(TileObject * p_tile : p_tiles) if(p_tile->get_type() == TileObject::BRICK)
 		{
 			if(SDLCommonFunc::CheckCollision(r_pos, p_tile->GetRect())) 
 			{
-				switch (p_tile->get_type())
-				{
-				case TileObject::BRICK :
-					rect_.x -= x_val_;
-					rect_.y -= y_val_;
-					r_pos.x -= x_val_;
-					r_pos.y -= y_val_;
-					//try another way
-					set_y_val(0);
-					break;
-				default:
-					break;
-				}
+				rect_.x -= x_val_;
+				rect_.y -= y_val_;
+				r_pos.x -= x_val_;
+				r_pos.y -= y_val_;
+				//try another way
+				set_x_val(Random(-1, 1) * UNIT_STEP);
+				set_y_val(Random(-1, 1) * UNIT_STEP);
+					
 			}
 		}
 	}

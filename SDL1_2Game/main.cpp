@@ -64,13 +64,61 @@ struct PauseMenu
 	TextObject Menu_Title [2]; 
 	bool is_show ;  
 }pauseMenu;
+struct pop_up
+{
+	TTF_Font * pop_font;
+	static const int numItems = 2;
+	BaseObject * Bk;
+	TextObject * txt[numItems];
+	SDL_Rect *P[numItems];
+	pop_up()
+	{
+		pop_font = TTF_OpenFont("Mojang-Bold.ttf", 35);
+		Bk = new BaseObject;
+		Bk->LoadImg("pop_up - Copy.png");
+		Bk->SetRect(360, 240);
+		for (int i = 0; i < numItems; i ++){
 
+			txt[i] = new TextObject;
+			if(i) txt[i]->SetText("NO");
+			else txt[i]->SetText("YES");
+			txt[i]->SetRect(460 + i * 200, 430);
+			txt[i]->SetColor(TextObject::BLACK_TEXT);
+			
+			P[i] = new SDL_Rect;
+			P[i]->w = 148;
+			P[i]->h = 84;
+		}
+		P[0]->x = 431;
+		P[0]->y = 427;
+
+		P[1]->x = 258 + 360;
+		P[1]->y = 168 + 240;
+
+	}
+	~pop_up()
+	{
+		if(Bk != nullptr) delete Bk;
+		for (int i = 0; i < numItems; i ++) {
+			if(txt[i] != nullptr) delete txt[i];
+			if(P[i] != nullptr) delete P[i];
+		}
+	}
+	void Print()
+	{
+		Bk->Show(g_screen);
+		for (int i = 0; i < numItems; i ++)
+			txt[i]->CreateGameText(pop_font, g_screen);
+	}
+} *pop = nullptr;
 enum gameStatus 
 {
 	START,
 	PLAYING,
 	PAUSE,
-	GUIDE
+	GUIDE,
+	POPUP,
+	WINNER
 };
 int g_stat = START;
 
@@ -417,6 +465,7 @@ void prepare_pause ()
 	}
 }
 int max_round = 0;
+int winner_count = 0;
 int main(int arc, char* argv[])
 {
 
@@ -438,6 +487,9 @@ int main(int arc, char* argv[])
 	max_round = 0;
 	round *now_round = nullptr;
 	bool is_first_move = 0;
+	int now_health = 600;
+	int now_AD = 60;
+	int now_AP = 30;
 	while (!is_quit) 
 	{
 		fps_timer.start();
@@ -486,8 +538,12 @@ int main(int arc, char* argv[])
 						{
 							if(i == 0){ 
 								if(has_cp == 0) {
+									winner_count = 0;
 									g_stat = PLAYING;
 									human_object.reset(0);
+									now_health = 600;
+									now_AD = 60;
+									now_AP = 30;
 									max_round = 0;
 									if(now_round != nullptr) delete now_round;
 									now_round = new round(0);
@@ -495,10 +551,14 @@ int main(int arc, char* argv[])
 								}
 								else if (has_cp == 1)
 								{
+									winner_count = 0;
 									g_stat = PLAYING;
 									fi >> max_round;
 									int health, AD, AP;
 									fi >> health >> AD >> AP;
+									now_health = health;
+									now_AD = AD;
+									now_AP = AP;
 									human_object.load_file(health, AD, AP);
 									if(now_round != nullptr) delete now_round;
 									now_round = new round(max_round);
@@ -507,8 +567,12 @@ int main(int arc, char* argv[])
 								}
 							}
 							else if(i == 1) {
+								winner_count = 0;
 								g_stat = PLAYING;
 								human_object.reset(0);
+								now_health = 600;
+								now_AD = 60;
+								now_AP = 30;
 								max_round = 0;
 								if(now_round != nullptr) delete now_round;
 								now_round = new round(0);
@@ -524,7 +588,60 @@ int main(int arc, char* argv[])
 			if (SDL_Flip(g_screen) == -1)
 				return 0;
 		}
-
+		else if(g_stat == POPUP)
+		{
+			SDLCommonFunc :: ApplySurface (g_bkground , g_screen ,0,0);
+			pop->Print();
+			if (SDL_Flip(g_screen) == -1)
+				return 0;
+			while (SDL_PollEvent(&g_even)) 
+			{
+			switch (g_even.type)
+				{
+				case SDL_QUIT:
+					SDLCommonFunc ::CleanUp () ; 
+					SDL_Quit() ; 
+					return 1;
+				case SDL_MOUSEMOTION:
+					x_mouse = g_even.motion.x;
+					y_mouse = g_even.motion.y;
+					//if else 
+					for (int i = 0; i < pop->numItems; i ++)
+					{
+						if(SDLCommonFunc::CheckPointInRect(x_mouse, y_mouse, *pop->P[i])){
+							pop->txt[i]->SetColor(TextObject::RED_TEXT);
+						}
+						else pop->txt[i]->SetColor(TextObject::BLACK_TEXT);
+					}
+					
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+					x_mouse = g_even.motion.x;
+					y_mouse = g_even.motion.y;
+					//if else
+					for (int i = 0; i < pop->numItems; i ++)
+					{
+						if(SDLCommonFunc::CheckPointInRect(x_mouse, y_mouse, *pop->P[i])){
+							if(i == 0)
+							{
+								std::ofstream fo("checkpoint.txt");
+								fo << 1 << "\n";
+								fo << max_round << "\n";
+								fo << now_health << " ";
+								fo << now_AD << " ";
+								fo << now_AP << " ";
+								fo.close();
+							}
+						}
+					}
+					delete pop;
+					g_stat = START;
+					break;
+				default:
+					break;
+				}
+			}
+		}
 
 		//// Pause Menu 
 		else if (g_stat == PAUSE) 
@@ -608,9 +725,7 @@ int main(int arc, char* argv[])
 							switch (i) 
 							{
 							case 0 :
-								pauseMenu.is_show = false ; 
-								g_stat = START ;  
-								human_object.prepare(g_stat) ; 
+								pauseMenu.is_show = false ;  
 								for (int i = 0 ; i <= pauseMenu.num_f ; i ++ ) 
 								{
 									SDLCommonFunc :: ApplySurface (g_bkground , g_screen , 0 , 0 ) ; 
@@ -621,9 +736,11 @@ int main(int arc, char* argv[])
 										return 0;
 									SDL_Delay(20) ; 
 								}
-								/*
-								them option save file 
-								*/
+								// them option luu file
+								
+								pop = new pop_up;
+								g_stat = POPUP;
+								human_object.prepare(g_stat);
 								break ; 
 							case 1 : 					
 								pauseMenu.is_show = false ; 
@@ -652,7 +769,9 @@ int main(int arc, char* argv[])
 				return 0;
 		}
 
-
+		//winner winner chicken dinner
+		
+			
 
 
 
@@ -706,25 +825,51 @@ int main(int arc, char* argv[])
 			if (g_stat == PAUSE) continue ;
 			if(now_round->gameLoop(is_quit, p_still_live, numLoop))
 			{
-				
-				human_object.reset(1);
-				human_object.stop();
-				max_round ++;
-				delete now_round;
-				now_round = new round(max_round);
-				now_round->preapre();
-				is_first_move = 1;
+				if(max_round == 5)
+				{
+					SDLCommonFunc::ApplySurface(g_bkground, g_screen, 0, 0);
+					BaseObject* Bk = new BaseObject;
+					Bk->LoadImg("winner.png");
+					Bk->SetRect(72, 64);
+					Bk->Show(g_screen);
+					delete Bk;
+					is_first_move = 1;
+					winner_count ++;
+					if(winner_count == 80) {
+						g_stat = START;
+						std::ofstream fo("checkpoint.txt");
+						fo << 0;
+						fo.close();
+					}
+				}
+				else {
+					winner_count = 0;
+					now_health = human_object.get_health();
+					now_AD = human_object.get_AD_pow();
+					now_AP = human_object.get_AP_pow();
+
+					human_object.reset(1);
+					human_object.stop();
+					max_round ++;
+					delete now_round;
+					now_round = new round(max_round);
+					now_round->preapre();
+					is_first_move = 1;
+				}
 			}
 			// Update screen
-			if (SDL_Flip(g_screen) == -1)
-				return 0;
+			
 			if(p_still_live == 0){
 				/*
 				them option luu file
 				*/
-				g_stat = START;
+				pop = new pop_up;
+				g_stat = POPUP;
+				human_object.prepare(g_stat); 
 				p_still_live = 1;
 			}
+			if (SDL_Flip(g_screen) == -1)
+				return 0;
 		}
 		
 
