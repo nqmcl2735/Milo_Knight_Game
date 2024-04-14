@@ -1,8 +1,11 @@
 # Milo_Knight_Game
  It's Mi-lo(Minh & Long) programing project base on Soul Knight's game play built with SDL1.2 and C++.
  ## Window Installation
- - First, clone this repo to your computer.
- - Open Debug/SDL1_2Game.exe and enjoy the game xD.
+ - First, install Visual Studio 2012.
+ - Clone this repo to your computer.
+ - Delete everything in checkpoint.txt
+ - Open SDL1_2Game.sln
+ - Press `F5` and enjoy the game xD.
 ## Gameplay
 - You have to control player to clear enermies in each room. Enemies can shoot projectiles, and have collider damage.
 - You can control player by using `←↑→↓`.
