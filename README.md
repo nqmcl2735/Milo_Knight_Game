@@ -30,4 +30,4 @@
 ## Bugs
 - If you see any bugs in our game, [`contact us`](https://forms.gle/8Jtg4FsLFkTioYHx9).
 ## Self-Assessment
-- 9
+- 8-8.5
