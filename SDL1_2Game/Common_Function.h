@@ -7,6 +7,7 @@
 #include <vector>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h> 
 #define Random(lf, rt) (lf + rand() % (rt - lf + 1))
 
 const int SCREEN_WIDTH = 1200;
@@ -32,6 +33,7 @@ static SDL_Surface *g_screen = NULL;
 static SDL_Surface *g_bkground = NULL;
 
 static SDL_Event g_even;
+
 
 namespace SDLCommonFunc
 {

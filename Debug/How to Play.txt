@@ -1,0 +1,11 @@
+- You can control player by using ← ↑ → ↓.
+- Your Player has 5 statics:
+	+ Health : it will be decrease when an Enemy hit you, if your Health equal to 0, you will die and Game Over.
+	+ Money : Increase each times you defeat an enemy. Using Money in store to buy new items.
+	+ Shield : If your shield index is greater than 0, each enemy shot will not reduce your health index but will reduce your shield index. Your shield index recover each times you go to new room.
+	+ AD power : A static that can increase by buying new items.
+	+ AP power : A static that can increase by buying new items.
+- Your player has 3 abilities:
+	+ Using Q to fire a damaging bolt of energy scale by your AD power
+	+ Using E to fire an orb that sign the enemy hit in 3 seconds . If player hits an signed enemy by another abilities, unsign and deals damage scale by your AP power.
+	+ Using SPACE to fire a powerful barrage of energy that deals damage to each unit it passes through scale by your AP power.

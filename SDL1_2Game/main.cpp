@@ -9,6 +9,14 @@
 #include "UserInterface.h"
 #include "TileObject.h"
 #include "fstream"
+#include "SDL_mixer.h"
+
+
+
+
+
+
+
 TTF_Font*  g_font_text = NULL;
 MainObject human_object;
 
@@ -33,6 +41,10 @@ bool Init()
 		return false;
 	}
 	return true;
+
+
+	
+	
 }
 struct menuStruct 
 {
@@ -234,7 +246,7 @@ struct round
 		
 	}
 
-	bool gameLoop(bool &is_quit, bool &p_still_live, long long numLoop)
+	bool gameLoop(bool &is_quit, bool &p_still_live, long long numLoop, Mix_Chunk * hurt_sound, Mix_Chunk * death_sound)
 	{
 		
 		//update round_status
@@ -304,6 +316,7 @@ struct round
 							bool is_col = SDLCommonFunc::CheckCollision(p_amo->GetRect(), human_object.GetRect());
 							if(is_col)
 							{
+								Mix_PlayChannel(-1, hurt_sound, 0);
 								if(human_object.get_shield() > 0)
 								{
 									int p_shield = human_object.get_shield();
@@ -379,8 +392,9 @@ struct round
 					p_threat->HandleMove(p_tiles);
 				}
 				// xu li va cham dan vs threat
-				if(!p_threat->checkAmour(human_object))
+				if(!p_threat->checkAmour(human_object, hurt_sound))
 				{
+					Mix_PlayChannel(-1, death_sound, 0);
 					r_mark ++;
 					p_threat->set_is_alive(0);
 					p_threat->SetRect(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -468,6 +482,25 @@ int max_round = 0;
 int winner_count = 0;
 int main(int arc, char* argv[])
 {
+	/* sound init*/
+	if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
+		return false;
+
+	Mix_Chunk *bk_sound = Mix_LoadWAV("MUSIC/bkgr_audio.wav");
+	Mix_PlayChannel(-1, bk_sound, -1);
+
+	Mix_Chunk *shoot_sound0 = Mix_LoadWAV("MUSIC/shoot0.wav");
+	Mix_Chunk *shoot_sound1 = Mix_LoadWAV("MUSIC/shoot1.wav");
+
+	Mix_Chunk *hurt_sound = Mix_LoadWAV("MUSIC/hurt.wav");
+
+	Mix_Chunk *death_sound = Mix_LoadWAV("MUSIC/death.wav");
+
+	Mix_Chunk *over_sound = Mix_LoadWAV("MUSIC/Game Over.wav");
+
+	Mix_Chunk *winner_sound = Mix_LoadWAV("MUSIC/You Win.wav");
+	//
+
 
 	ImpTimer fps_timer;
 	srand(time(NULL));
@@ -818,12 +851,12 @@ int main(int arc, char* argv[])
 						human_object.stop();
 						break; 
 				}
-				if(is_first_move == 0) human_object.HandleInputAction(g_even);
+				if(is_first_move == 0) human_object.HandleInputAction(g_even, shoot_sound0, shoot_sound1);
 				else is_first_move = 0;
 				
 			}
 			if (g_stat == PAUSE) continue ;
-			if(now_round->gameLoop(is_quit, p_still_live, numLoop))
+			if(now_round->gameLoop(is_quit, p_still_live, numLoop, hurt_sound, death_sound))
 			{
 				if(max_round == 5)
 				{
@@ -835,6 +868,7 @@ int main(int arc, char* argv[])
 					delete Bk;
 					is_first_move = 1;
 					winner_count ++;
+					if(winner_count== 2) Mix_PlayChannel(-1, winner_sound, 0);
 					if(winner_count == 80) {
 						g_stat = START;
 						std::ofstream fo("checkpoint.txt");
@@ -867,6 +901,7 @@ int main(int arc, char* argv[])
 				g_stat = POPUP;
 				human_object.prepare(g_stat); 
 				p_still_live = 1;
+				Mix_PlayChannel(-1, over_sound, 0);
 			}
 			if (SDL_Flip(g_screen) == -1)
 				return 0;

@@ -25,7 +25,7 @@ MainObject::~MainObject()
 	;
 }
 
-void MainObject::HandleInputAction(SDL_Event events)
+void MainObject::HandleInputAction(SDL_Event events, Mix_Chunk *shoot0, Mix_Chunk *shoot1)
 {
 	if(events.type == SDL_KEYDOWN)
 	{
@@ -56,19 +56,22 @@ void MainObject::HandleInputAction(SDL_Event events)
 			x_val_ -= UNIT_STEP;
 			break;
 		case SDLK_q:
-			if(coolDownQ_ == 0){ 
+			if(coolDownQ_ == 0){
+				Mix_PlayChannel(-1, shoot0, 0);
 				ShootAmo();
 				coolDownQ_ = COOLQ;
 			}
 			break;
 		case SDLK_e:
 			if(coolDownE_ == 0){
+				Mix_PlayChannel(-1, shoot0, 0);
 				ShootOrb();
 				coolDownE_ = COOLE;
 			}
 			break;
 		case SDLK_SPACE:
 			if(coolDownU_ == 0){
+				Mix_PlayChannel(-1, shoot1, 0);
 				ShootUlti();
 				coolDownU_ = COOLU;
 			}

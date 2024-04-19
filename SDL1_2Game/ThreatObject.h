@@ -62,7 +62,7 @@ public:
 	void change_health(int x){health_ += x;}
 	int get_health() const {return health_;}
 	
-	bool checkAmour(MainObject & human_object);
+	bool checkAmour(MainObject & human_object, Mix_Chunk * hurt_sound);
 	bool notTouched(AmoObject* p_amo) 
 	{
 		for (AmoObject * am : TouchedUlt_) if(p_amo == am)

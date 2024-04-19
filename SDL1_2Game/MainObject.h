@@ -45,7 +45,7 @@ public:
 	MainObject();
 	~MainObject();
 
-	void HandleInputAction(SDL_Event events);
+	void HandleInputAction(SDL_Event events, Mix_Chunk *shoot0, Mix_Chunk *shoot1);
 	bool HandleMove(BaseObject * Lgate_object,BaseObject * Rgate_object, const std::vector<TileObject*> & p_tiles);
 	void MakeAmo(SDL_Surface* des);
 	void SetAmoList(std::vector<AmoObject*> amo_list) {

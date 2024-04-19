@@ -213,7 +213,7 @@ void ThreatObject:: HandleMove(const std::vector<TileObject*> & p_tiles)
 void ThreatObject::HandleInputAction(SDL_Event events){
 	
 }
-bool ThreatObject::checkAmour(MainObject & human_object)
+bool ThreatObject::checkAmour(MainObject & human_object, Mix_Chunk * hurt_sound)
 {
 	std::vector<AmoObject*> amo_list = human_object.GetAmoList();
 	for (int am = 0; am < amo_list.size(); am ++)
@@ -226,6 +226,7 @@ bool ThreatObject::checkAmour(MainObject & human_object)
 			else if(type_ == TANK_THREAT) is_col = SDLCommonFunc::CheckCollision(p_amo->GetRect(), r_pos);
 			if(is_col)
 			{
+				Mix_PlayChannel(-1, hurt_sound, 0);
 				int tp = p_amo->get_type();
 				if(tp == AmoObject::PLASER || tp == AmoObject::VLASER){
 					change_health((-1) * (100.0/100.0 * human_object.get_AD_pow()));
@@ -250,6 +251,12 @@ bool ThreatObject::checkAmour(MainObject & human_object)
 					human_object.Remove_Amo(am);
 				}
 				if(get_health() <= 0){
+					
+					if(type_ == TANK_THREAT) 
+					{
+						r_pos.x = SCREEN_WIDTH;
+						r_pos.y = SCREEN_HEIGHT;
+					}
 					return 0;
 				}
 			}
